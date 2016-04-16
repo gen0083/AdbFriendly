@@ -1,3 +1,11 @@
+package jp.gcreate.plugins.adbrolling;
+
+import com.intellij.notification.Notification;
+import com.intellij.notification.NotificationType;
+import com.intellij.notification.Notifications;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+
 /*
  * adb-rolling
  * Copyright 2016 gen0083
@@ -15,5 +23,12 @@
  * limitations under the License.
  */
 
-rootProject.name = 'adb-rolling'
+public class TestAction extends AnAction {
 
+    @Override
+    public void actionPerformed(AnActionEvent e) {
+        Notifications.Bus.notify(
+                new Notification("test", "test notification", "this is test for my plugin", NotificationType.INFORMATION)
+        );
+    }
+}

@@ -1,7 +1,7 @@
 ### .gitignore template
 
-.idea/*.xml
-!.idea/copyright
+.idea/**/*.xml
+!.idea/copyright/*.xml
 !.idea/codeStyleSettings.xml
 ### Android template
 # Built application files
