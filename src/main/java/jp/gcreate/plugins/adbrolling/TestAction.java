@@ -1,10 +1,13 @@
 package jp.gcreate.plugins.adbrolling;
 
+import com.android.ddmlib.AndroidDebugBridge;
+import com.android.ddmlib.IDevice;
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.project.Project;
 
 /*
  * adb-rolling
@@ -27,8 +30,13 @@ public class TestAction extends AnAction {
 
     @Override
     public void actionPerformed(AnActionEvent e) {
+        Project project = e.getProject();
+        AndroidDebugBridge.initIfNeeded(false);
+        AndroidDebugBridge bridge = AndroidDebugBridge.createBridge("/Android-sdk/platform-tools/adb", false);
+        IDevice devices[] = bridge.getDevices();
+        IDevice device = devices[0];
         Notifications.Bus.notify(
-                new Notification("test", "test notification", "this is test for my plugin", NotificationType.INFORMATION)
+                new Notification("test", "test notification", "this is test for my plugin " + device.getName(), NotificationType.INFORMATION)
         );
     }
 }

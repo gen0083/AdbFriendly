@@ -15,5 +15,5 @@
  * limitations under the License.
  */
 
-rootProject.name = 'adb-rolling'
+rootProject.name = 'ADB Rolling'
 
