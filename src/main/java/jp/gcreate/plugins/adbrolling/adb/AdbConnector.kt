@@ -24,6 +24,7 @@ import com.android.ddmlib.IDevice
 import com.intellij.notification.Notification
 import com.intellij.notification.NotificationType
 import com.intellij.notification.Notifications
+import jp.gcreate.plugins.adbrolling.Util.Logger
 import javax.swing.SwingUtilities
 
 
@@ -60,6 +61,7 @@ object AdbConnector : IClientChangeListener, IDeviceChangeListener, IDebugBridge
                         "client:$client mask:$changeMask",
                         NotificationType.INFORMATION)
         )
+        Logger.d(this, "clientChanged $client $changeMask")
     }
 
     override fun deviceChanged(device: IDevice, changeMask: Int) {
@@ -69,6 +71,7 @@ object AdbConnector : IClientChangeListener, IDeviceChangeListener, IDebugBridge
                         "device:$device mask:$changeMask",
                         NotificationType.INFORMATION)
         )
+        Logger.d(this, "deviceChanged $device")
     }
 
     override fun deviceConnected(device: IDevice) {
@@ -78,6 +81,7 @@ object AdbConnector : IClientChangeListener, IDeviceChangeListener, IDebugBridge
                         "client:$device",
                         NotificationType.INFORMATION)
         )
+        Logger.d(this, "deviceConnected $device")
     }
 
     override fun deviceDisconnected(device: IDevice) {
@@ -87,19 +91,19 @@ object AdbConnector : IClientChangeListener, IDeviceChangeListener, IDebugBridge
                         "client:$device",
                         NotificationType.INFORMATION)
         )
+        Logger.d(this, "deviceDisconnected $device")
     }
 
     /**
      * If AndroidDebugBridge is changed then notify this callback.
      */
     override fun bridgeChanged(bridge: AndroidDebugBridge) {
-        SwingUtilities.invokeLater {
-            Notifications.Bus.notify(
-                    Notification("bridgeChanged",
-                            "Adb bridgeChanged",
-                            "client:$bridge",
-                            NotificationType.INFORMATION)
-            )
-        }
+        Notifications.Bus.notify(
+                Notification("bridgeChanged",
+                        "Adb bridgeChanged",
+                        "client:$bridge",
+                        NotificationType.INFORMATION)
+        )
+        Logger.d(this, "bridgeChanged $bridge")
     }
 }

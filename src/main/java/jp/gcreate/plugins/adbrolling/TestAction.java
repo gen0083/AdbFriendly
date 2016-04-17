@@ -1,7 +1,6 @@
 package jp.gcreate.plugins.adbrolling;
 
-import com.android.ddmlib.AndroidDebugBridge;
-import com.android.ddmlib.IDevice;
+import com.android.ddmlib.*;
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
@@ -9,6 +8,9 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import jp.gcreate.plugins.adbrolling.adb.AdbConnector;
+import jp.gcreate.plugins.adbrolling.adb.ShellReceiver;
+
+import java.io.IOException;
 
 import static sun.audio.AudioDevice.device;
 
@@ -36,6 +38,17 @@ public class TestAction extends AnAction {
         Project project = e.getProject();
         IDevice devices[] = AdbConnector.INSTANCE.getDevices();
         IDevice device = devices[0];
+        try {
+            device.executeShellCommand("dumpsys activity", new ShellReceiver());
+        } catch (TimeoutException e1) {
+            e1.printStackTrace();
+        } catch (AdbCommandRejectedException e1) {
+            e1.printStackTrace();
+        } catch (ShellCommandUnresponsiveException e1) {
+            e1.printStackTrace();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
         Notifications.Bus.notify(
                 new Notification("test", "test notification", "this is test for my plugin " + device.getName(), NotificationType.INFORMATION)
         );
