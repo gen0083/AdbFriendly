@@ -17,7 +17,6 @@
 
 package jp.gcreate.plugins.adbrolling.adb
 
-import com.android.ddmlib.IShellOutputReceiver
 import com.android.ddmlib.MultiLineReceiver
 import jp.gcreate.plugins.adbrolling.Util.Logger
 
