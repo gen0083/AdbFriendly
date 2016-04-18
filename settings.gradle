@@ -1,5 +1,5 @@
 /*
- * adb-rolling
+ * ADB Friendly
  * Copyright 2016 gen0083
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,5 +15,5 @@
  * limitations under the License.
  */
 
-rootProject.name = 'ADB Rolling'
+rootProject.name = 'ADB Friendly'
 

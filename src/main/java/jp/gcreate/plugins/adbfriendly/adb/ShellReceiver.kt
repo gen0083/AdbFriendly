@@ -1,5 +1,5 @@
 /*
- * ADB Rolling
+ * ADB Friendly
  * Copyright 2016 gen0083
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,26 +15,23 @@
  * limitations under the License.
  */
 
-package jp.gcreate.plugins.adbrolling
+package jp.gcreate.plugins.adbfriendly.adb
 
-import org.hamcrest.CoreMatchers.*
-import org.hamcrest.MatcherAssert.assertThat
-import org.junit.Test
+import com.android.ddmlib.MultiLineReceiver
+import jp.gcreate.plugins.adbfriendly.Util.Logger
 
-class ContainsTest {
-    val target = "column=name value=1 test=test"
 
-    @Test
-    fun getIntFromValue(){
-        assertThat(target.contains("value"), `is`(true))
+class ShellReceiver() : MultiLineReceiver(){
+    var cancel: Boolean = false
+
+    override fun processNewLines(lines: Array<out String>?) {
+        lines?.forEach {
+            Logger.d(this, it.toString())
+        }
     }
 
-    @Test
-    fun regex(){
-        val regex = Regex("value=(\\d)")
-        val result = regex.find(target)
-        assertThat(result, notNullValue())
-        assertThat(result?.groups?.size, `is`(2))
-        assertThat(result?.groups?.get(1)?.value, `is`("1"))
+    override fun isCancelled(): Boolean {
+        Logger.d(this, "isCancelled called now:$cancel")
+        return cancel
     }
 }

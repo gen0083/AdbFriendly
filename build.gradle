@@ -1,5 +1,5 @@
 /*
- * adb-rolling
+ * ADB Friendly
  * Copyright 2016 gen0083
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,7 +37,7 @@ apply plugin: 'kotlin'
 intellij {
     version 'IC-14.1.4'
     plugins 'coverage'
-    pluginName 'AdbRolling'
+    pluginName 'AdbFriendly'
 }
 
 sourceCompatibility = 1.6

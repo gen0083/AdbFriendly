@@ -1,7 +1,7 @@
-ADB Rolling
+ADB Friendly
 ===
 
-ADB Rolling rotates screen on connected devices or emulators via adb.
+ADB Friendly rotates screen on connected devices or emulators via adb.
 This plugin for Android Studio.
 
 ## Execute

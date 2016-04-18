@@ -1,5 +1,5 @@
 /*
- * ADB Rolling
+ * ADB Friendly
  * Copyright 2016 gen0083
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package jp.gcreate.plugins.adbrolling.Util
+package jp.gcreate.plugins.adbfriendly.Util
 
 import java.text.SimpleDateFormat
 import java.util.*

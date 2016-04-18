@@ -1,4 +1,4 @@
-package jp.gcreate.plugins.adbrolling;
+package jp.gcreate.plugins.adbfriendly;
 
 import com.android.ddmlib.*;
 import com.intellij.notification.Notification;
@@ -7,15 +7,13 @@ import com.intellij.notification.Notifications;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
-import jp.gcreate.plugins.adbrolling.adb.AdbConnector;
-import jp.gcreate.plugins.adbrolling.adb.ShellReceiver;
+import jp.gcreate.plugins.adbfriendly.adb.AdbConnector;
+import jp.gcreate.plugins.adbfriendly.adb.ShellReceiver;
 
 import java.io.IOException;
 
-import static sun.audio.AudioDevice.device;
-
 /*
- * adb-rolling
+ * ADB Friendly
  * Copyright 2016 gen0083
  *
  * Licensed under the Apache License, Version 2.0 (the "License");

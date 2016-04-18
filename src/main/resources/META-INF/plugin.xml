@@ -1,5 +1,5 @@
 <!--
-  ~ adb-rolling
+  ~ ADB Friendly
   ~ Copyright 2016 gen0083
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,8 +16,8 @@
   -->
 
 <idea-plugin version="2">
-    <id>jp.gcreate.plugins.adb_rolling</id>
-    <name>ADB Rolling</name>
+    <id>jp.gcreate.plugins.adbfriendly</id>
+    <name>ADB Friendly</name>
     <version>1.0</version>
     <vendor email="archiherewego@gmail.com"
             url="http://gcreate.jp/">
@@ -48,8 +48,8 @@
 
     <actions>
         <!-- Add your actions here -->
-        <action id="jp.gcreate.plugins.adbrolling.TestAction"
-                class="jp.gcreate.plugins.adbrolling.TestAction"
+        <action id="jp.gcreate.plugins.adbfriendly.TestAction"
+                class="jp.gcreate.plugins.adbfriendly.TestAction"
                 text="Test Action"
                 description="Test Action"
                 icon="/images/icon.png"

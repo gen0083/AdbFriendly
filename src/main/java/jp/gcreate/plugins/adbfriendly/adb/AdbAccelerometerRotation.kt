@@ -1,5 +1,5 @@
 /*
- * ADB Rolling
+ * ADB Friendly
  * Copyright 2016 gen0083
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-package jp.gcreate.plugins.adbrolling.adb
+package jp.gcreate.plugins.adbfriendly.adb
 
 import com.android.ddmlib.IDevice
-import jp.gcreate.plugins.adbrolling.Util.Logger
+import jp.gcreate.plugins.adbfriendly.Util.Logger
 
 
 class AdbAccelerometerRotation(var device: IDevice) {
