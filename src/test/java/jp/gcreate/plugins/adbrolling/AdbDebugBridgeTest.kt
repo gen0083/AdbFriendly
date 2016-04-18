@@ -1,17 +1,11 @@
 package jp.gcreate.plugins.adbrolling
 
 import com.android.ddmlib.AndroidDebugBridge
-import com.android.ddmlib.IDevice
-import com.intellij.notification.Notification
-import com.intellij.notification.NotificationType
-import com.intellij.notification.Notifications
-import com.intellij.openapi.actionSystem.AnAction
-import com.intellij.openapi.actionSystem.AnActionEvent
-import com.intellij.openapi.project.Project
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import java.util.concurrent.TimeUnit
+import kotlin.test.assertEquals
 
 /*
  * adb-rolling
@@ -36,8 +30,17 @@ class AdbDebugBridgeTest {
     @Before
     fun setUp() {
         AndroidDebugBridge.initIfNeeded(false)
-        bridge = AndroidDebugBridge.createBridge("/android-sdk/platform-tools/adb", false)
-        println("bridge is ${bridge?.toString()}")
+        bridge = AndroidDebugBridge.createBridge()
+        wait@ for(i in 0..100){
+            TimeUnit.MILLISECONDS.sleep(10)
+            if(bridge.devices.size > 0){
+                println("device connected at $i times")
+                break@wait
+            }
+        }
+        if(bridge.devices.size == 0){
+            throw RuntimeException("check your device connected?")
+        }
     }
 
     @After
@@ -47,8 +50,8 @@ class AdbDebugBridgeTest {
 
     @Test
     fun getDeviceName() {
-        TimeUnit.SECONDS.sleep(2)
         val devices = bridge.devices
+        assertEquals(1, devices.size)
         println("device count:${devices.size}")
         devices.forEach {
             println("device name:${it.name}")
