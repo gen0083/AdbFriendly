@@ -65,7 +65,11 @@
           <option name="IF_BRACE_FORCE" value="3" />
         </codeStyleSettings>
         <codeStyleSettings language="kotlin">
+          <option name="ALIGN_MULTILINE_PARAMETERS_IN_CALLS" value="true" />
           <option name="ALIGN_MULTILINE_BINARY_OPERATION" value="true" />
+          <option name="ALIGN_MULTILINE_EXTENDS_LIST" value="true" />
+          <option name="CALL_PARAMETERS_WRAP" value="1" />
+          <option name="METHOD_PARAMETERS_WRAP" value="1" />
         </codeStyleSettings>
       </value>
     </option>
