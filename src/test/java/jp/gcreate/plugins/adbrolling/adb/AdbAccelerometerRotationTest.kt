@@ -22,10 +22,10 @@ import com.android.ddmlib.IDevice
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.AfterClass
+import org.junit.Assume.assumeTrue
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
-import org.junit.Assume.assumeTrue
 import java.util.concurrent.TimeUnit
 import kotlin.test.assertEquals
 
