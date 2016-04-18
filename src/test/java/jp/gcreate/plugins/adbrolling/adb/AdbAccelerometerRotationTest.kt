@@ -25,7 +25,8 @@ import org.junit.AfterClass
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
-import java.util.concurrent.TimeUnit.MILLISECONDS
+import org.junit.Assume.assumeTrue
+import java.util.concurrent.TimeUnit
 import kotlin.test.assertEquals
 
 /*
@@ -53,15 +54,14 @@ class AdbAccelerometerRotationTest {
             AndroidDebugBridge.initIfNeeded(false)
             AndroidDebugBridge.createBridge()
             wait@ for (i in 0..100) {
-                MILLISECONDS.sleep(10)
+                TimeUnit.MILLISECONDS.sleep(10)
                 if (AndroidDebugBridge.getBridge().devices.size > 0) {
                     println("device connected at $i times")
                     break@wait
                 }
             }
-            if (AndroidDebugBridge.getBridge().devices.size == 0) {
-                throw RuntimeException("check your device connected?")
-            }
+            assumeTrue("this test must run under the connected android device and cau use adb.",
+                       AndroidDebugBridge.getBridge().devices.size > 0)
         }
 
         @AfterClass
