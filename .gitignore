@@ -1,6 +1,7 @@
 ### .gitignore template
 
 .idea/**/*.xml
+.idea/.name
 !.idea/copyright/*.xml
 !.idea/codeStyleSettings.xml
 ### Android template
