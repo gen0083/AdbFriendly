@@ -70,4 +70,10 @@ class AdbUserRotationTest {
         val degree = sut.getUserRotationDegree()
         assertThat(degree, `is`(UserRotationDegree.DEGREE_0))
     }
+
+    @Test
+    fun isExistTest(){
+        val actual = sut.isExist()
+        assertThat(actual, `is`(true))
+    }
 }

@@ -47,6 +47,12 @@ class AdbUserRotation(var device: IDevice) {
         }
     }
 
+    fun isExist(): Boolean{
+        val outputs = Command(device, COMMAND_QUERY).execute()
+        Logger.d(this, "isExist output=${outputs.joinToString("\n")}")
+        return (outputs.size == 1 && outputs[0].contains("value="))
+    }
+
     private fun getIntValueFromOutput(output: String): Int{
         val match = regex.find(output)
         if(match == null){
