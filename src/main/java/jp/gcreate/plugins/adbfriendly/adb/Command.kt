@@ -20,7 +20,7 @@ package jp.gcreate.plugins.adbfriendly.adb
 import com.android.ddmlib.IDevice
 import com.android.ddmlib.IShellOutputReceiver
 import com.android.ddmlib.TimeoutException
-import jp.gcreate.plugins.adbfriendly.Util.Logger
+import jp.gcreate.plugins.adbfriendly.util.Logger
 import java.util.*
 import java.util.concurrent.TimeUnit
 

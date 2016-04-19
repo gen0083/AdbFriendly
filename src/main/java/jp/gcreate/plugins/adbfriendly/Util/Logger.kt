@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package jp.gcreate.plugins.adbfriendly.Util
+package jp.gcreate.plugins.adbfriendly.util
 
 import java.text.SimpleDateFormat
 import java.util.*

@@ -24,7 +24,7 @@ import com.android.ddmlib.IDevice
 import com.intellij.notification.Notification
 import com.intellij.notification.NotificationType
 import com.intellij.notification.Notifications
-import jp.gcreate.plugins.adbfriendly.Util.Logger
+import jp.gcreate.plugins.adbfriendly.util.Logger
 import javax.swing.SwingUtilities
 
 

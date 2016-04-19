@@ -18,7 +18,7 @@
 package jp.gcreate.plugins.adbfriendly.adb
 
 import com.android.ddmlib.IDevice
-import jp.gcreate.plugins.adbfriendly.Util.Logger
+import jp.gcreate.plugins.adbfriendly.util.Logger
 
 
 class AdbUserRotation(var device: IDevice) {
