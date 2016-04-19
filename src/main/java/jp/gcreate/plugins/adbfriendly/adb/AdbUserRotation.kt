@@ -39,9 +39,21 @@ class AdbUserRotation(var device: IDevice) {
         when (outputs.size) {
             0    -> throw RuntimeException("user_rotation has not been set yet.")
             1    -> {
-                return UserRotationDegree.DEGREE_0
+                val intValue = getIntValueFromOutput(outputs[0])
+                Logger.d(this, "intValue is $intValue from output '${outputs[0]}'")
+                return UserRotationDegree.fromIntValue(intValue)
             }
             else -> throw RuntimeException("query execution error got outputs \n${outputs.joinToString("\n")}")
+        }
+    }
+
+    private fun getIntValueFromOutput(output: String): Int{
+        val match = regex.find(output)
+        if(match == null){
+            Logger.e(this, "output dose not contain 'value=X'. output=$output")
+            throw RuntimeException("output dose not contain 'value=X'. output is '$output'")
+        }else{
+            return match.groups[1]!!.value.toInt()
         }
     }
 }
