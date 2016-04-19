@@ -25,7 +25,7 @@ import com.intellij.notification.Notification
 import com.intellij.notification.NotificationType
 import com.intellij.notification.Notifications
 import jp.gcreate.plugins.adbfriendly.util.Logger
-import javax.swing.SwingUtilities
+import java.util.*
 
 
 object AdbConnector : IClientChangeListener, IDeviceChangeListener, IDebugBridgeChangeListener {
@@ -37,8 +37,12 @@ object AdbConnector : IClientChangeListener, IDeviceChangeListener, IDebugBridge
 
     fun connectAdb() {
         if (initialized) {
+            AndroidDebugBridge.removeClientChangeListener(this)
+            AndroidDebugBridge.removeDebugBridgeChangeListener(this)
+            AndroidDebugBridge.removeDeviceChangeListener(this)
             AndroidDebugBridge.terminate()
         }
+        initialized = true
         AndroidDebugBridge.initIfNeeded(false)
         AndroidDebugBridge.createBridge()
         AndroidDebugBridge.addClientChangeListener(this)
@@ -54,7 +58,23 @@ object AdbConnector : IClientChangeListener, IDeviceChangeListener, IDebugBridge
         return getAdbBridge().devices
     }
 
+    private val clientCallbacks: ArrayList<IClientChangeListener> = arrayListOf()
+
+    fun addClientChangeListener(listener: IClientChangeListener){
+        if(clientCallbacks.contains(listener)) {
+            throw IllegalStateException("ClientChangeListener [$listener] is already added. You may forget to remove listener.")
+        }
+        clientCallbacks.add(listener)
+    }
+
+    fun removeClientChangeListener(listener: IClientChangeListener){
+        clientCallbacks.remove(listener)
+    }
+
     override fun clientChanged(client: Client, changeMask: Int) {
+        clientCallbacks.forEach {
+            it.clientChanged(client, changeMask)
+        }
         Notifications.Bus.notify(
                 Notification("clientChanged",
                         "Adb clientChanged",
@@ -64,7 +84,23 @@ object AdbConnector : IClientChangeListener, IDeviceChangeListener, IDebugBridge
         Logger.d(this, "clientChanged $client $changeMask")
     }
 
+    private val deviceCallbacks: ArrayList<IDeviceChangeListener> = arrayListOf()
+
+    fun addDeviceChangeListener(listener: IDeviceChangeListener){
+        if(deviceCallbacks.contains(listener)) {
+            throw IllegalStateException("DeviceChangedListener [$listener}] is already added. You may forget to remove listener.")
+        }
+        deviceCallbacks.add(listener)
+    }
+
+    fun removeDeviceChangedListener(listener: IDeviceChangeListener) {
+        deviceCallbacks.remove(listener)
+    }
+
     override fun deviceChanged(device: IDevice, changeMask: Int) {
+        deviceCallbacks.forEach {
+            it.deviceChanged(device, changeMask)
+        }
         Notifications.Bus.notify(
                 Notification("deviceChanged",
                         "Adb deviceChanged",
@@ -75,6 +111,9 @@ object AdbConnector : IClientChangeListener, IDeviceChangeListener, IDebugBridge
     }
 
     override fun deviceConnected(device: IDevice) {
+        deviceCallbacks.forEach {
+            it.deviceConnected(device)
+        }
         Notifications.Bus.notify(
                 Notification("deviceConnected",
                         "Adb deviceConnected",
@@ -85,6 +124,9 @@ object AdbConnector : IClientChangeListener, IDeviceChangeListener, IDebugBridge
     }
 
     override fun deviceDisconnected(device: IDevice) {
+        deviceCallbacks.forEach {
+            it.deviceDisconnected(device)
+        }
         Notifications.Bus.notify(
                 Notification("deviceDisconnected",
                         "Adb deviceDisconnected",
@@ -97,7 +139,23 @@ object AdbConnector : IClientChangeListener, IDeviceChangeListener, IDebugBridge
     /**
      * If AndroidDebugBridge is changed then notify this callback.
      */
+    private val bridgeCallbacks: ArrayList<IDebugBridgeChangeListener> = arrayListOf()
+
+    fun addBridgeChangedListener(listener: IDebugBridgeChangeListener) {
+        if(bridgeCallbacks.contains(listener)) {
+            throw IllegalStateException("DebugBridgeChangedListener [$listener}] is already added. You may forget to remove listener.")
+        }
+        bridgeCallbacks.add(listener)
+    }
+
+    fun removeBridgeChangedListener(listener: IDebugBridgeChangeListener) {
+        bridgeCallbacks.remove(listener)
+    }
+
     override fun bridgeChanged(bridge: AndroidDebugBridge) {
+        bridgeCallbacks.forEach {
+            it.bridgeChanged(bridge)
+        }
         Notifications.Bus.notify(
                 Notification("bridgeChanged",
                         "Adb bridgeChanged",
