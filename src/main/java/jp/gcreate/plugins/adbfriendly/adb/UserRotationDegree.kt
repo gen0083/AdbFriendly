@@ -17,8 +17,12 @@
 
 package jp.gcreate.plugins.adbfriendly.adb
 
-
-enum class UserRotationDegree(val intValue: Int, val bind: String) {
+/**
+ * Refer
+ *  http://developer.android.com/intl/ja/reference/android/provider/Settings.System.html#USER_ROTATION
+ *  http://developer.android.com/intl/ja/reference/android/view/Surface.html#ROTATION_0
+ */
+enum class UserRotationDegree(val intValue: Int, val bindArgs: String) {
     DEGREE_0  (0, "value:i:0"),
     DEGREE_90 (1, "value:i:1"),
     DEGREE_180(2, "value:i:2"),

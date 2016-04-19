@@ -28,8 +28,8 @@ class AdbUserRotation(var device: IDevice) {
         const val WHERE = "\"name='user_rotation'\""
         const val COMMAND_QUERY = "content query --uri $URI --where $WHERE"
         const val COMMAND_DELETE = "content delete --uri $URI --where $WHERE"
-        fun insertCommand(degree: UserRotationDegree) = "content insert --uri $URI --bind $COLUMN --bind ${degree.bind}"
-        fun updateCommand(degree: UserRotationDegree) = "content update --uri $URI --bind ${degree.bind} --where $WHERE"
+        fun insertCommand(degree: UserRotationDegree) = "content insert --uri $URI --bind $COLUMN --bind ${degree.bindArgs}"
+        fun updateCommand(degree: UserRotationDegree) = "content update --uri $URI --bind ${degree.bindArgs} --where $WHERE"
         val regex: Regex = Regex("value=(\\d)")
     }
 
