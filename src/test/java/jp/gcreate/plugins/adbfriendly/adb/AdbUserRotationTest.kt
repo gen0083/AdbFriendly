@@ -19,7 +19,6 @@ package jp.gcreate.plugins.adbfriendly.adb
 
 import com.android.ddmlib.AndroidDebugBridge
 import com.android.ddmlib.IDevice
-import jp.gcreate.plugins.adbfriendly.adb.AdbUserRotation.Companion.Degree
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.AfterClass
@@ -69,6 +68,6 @@ class AdbUserRotationTest {
     @Test
     fun getUserRotationDegree(){
         val degree = sut.getUserRotationDegree()
-        assertThat(degree, `is`(Degree.DEGREE_0))
+        assertThat(degree, `is`(UserRotationDegree.DEGREE_0))
     }
 }
