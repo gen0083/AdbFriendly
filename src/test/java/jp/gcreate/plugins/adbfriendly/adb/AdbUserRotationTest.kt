@@ -21,6 +21,7 @@ import com.android.ddmlib.AndroidDebugBridge
 import com.android.ddmlib.IDevice
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.isOneOf
 import org.junit.AfterClass
 import org.junit.Assume.assumeTrue
 import org.junit.Before
@@ -44,14 +45,16 @@ class AdbUserRotationTest {
                 }
             }
             assumeTrue("this test must run under the connected android device and cau use adb.",
-                        AndroidDebugBridge.getBridge().devices.size > 0)
+                       AndroidDebugBridge.getBridge().devices.size > 0)
         }
 
         @AfterClass
         @JvmStatic
         fun tearDownClass() {
             val sut = AdbUserRotation(AndroidDebugBridge.getBridge().devices[0])
-            // user_rotation set to 0
+            sut.setUserRotationDegree(UserRotationDegree.DEGREE_0)
+            val degree = sut.getUserRotationDegree()
+            println("test finished set user_rotation to ${degree.name}")
             AndroidDebugBridge.terminate()
         }
     }
@@ -66,14 +69,24 @@ class AdbUserRotationTest {
     }
 
     @Test
-    fun getUserRotationDegree(){
+    fun getUserRotationDegree() {
         val degree = sut.getUserRotationDegree()
-        assertThat(degree, `is`(UserRotationDegree.DEGREE_0))
+        assertThat(degree, isOneOf(UserRotationDegree.DEGREE_0,
+                                   UserRotationDegree.DEGREE_90,
+                                   UserRotationDegree.DEGREE_180,
+                                   UserRotationDegree.DEGREE_270))
     }
 
     @Test
-    fun isExistTest(){
+    fun isExistTest() {
         val actual = sut.isExist()
         assertThat(actual, `is`(true))
+    }
+
+    @Test
+    fun setUserRotation180() {
+        assertThat(sut.setUserRotationDegree(UserRotationDegree.DEGREE_180), `is`(true))
+        val actual = sut.getUserRotationDegree()
+        assertThat(actual, `is`(UserRotationDegree.DEGREE_180))
     }
 }
