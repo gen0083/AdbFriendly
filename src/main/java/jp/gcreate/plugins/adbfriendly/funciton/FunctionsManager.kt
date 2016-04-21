@@ -22,6 +22,7 @@ import com.android.ddmlib.AndroidDebugBridge.*
 import com.android.ddmlib.Client
 import com.android.ddmlib.IDevice
 import jp.gcreate.plugins.adbfriendly.util.Logger
+import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.Future
@@ -60,6 +61,20 @@ object FunctionsManager : IDeviceChangeListener, IClientChangeListener, IDebugBr
             if(currentFunction == null) return null
             return currentFunction
         }
+    }
+
+    private val functionsCallbacks: ArrayList<FunctionsCallback> = arrayListOf()
+
+    fun addFunctionsCallback(callback: FunctionsCallback) {
+        if(functionsCallbacks.contains(callback)){
+            Logger.d(this, "Callback is already added. You should forget to remove callback[$callback].")
+            throw RuntimeException("Callback is already added. You should forget to remove callback[$callback]")
+        }
+        functionsCallbacks.add(callback)
+    }
+
+    fun removeFunctionsCallbacks(callback: FunctionsCallback) {
+        functionsCallbacks.remove(callback)
     }
 
     override fun onDone() {

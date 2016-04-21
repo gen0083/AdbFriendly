@@ -1,6 +1,6 @@
 package jp.gcreate.plugins.adbfriendly;
 
-import com.android.ddmlib.*;
+import com.android.ddmlib.IDevice;
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
@@ -8,9 +8,7 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import jp.gcreate.plugins.adbfriendly.adb.AdbConnector;
-import jp.gcreate.plugins.adbfriendly.adb.ShellReceiver;
-
-import java.io.IOException;
+import jp.gcreate.plugins.adbfriendly.ui.FunctionsForm;
 
 /*
  * ADB Friendly
@@ -36,17 +34,9 @@ public class TestAction extends AnAction {
         Project project = e.getProject();
         IDevice devices[] = AdbConnector.INSTANCE.getDevices();
         IDevice device = devices[0];
-        try {
-            device.executeShellCommand("dumpsys activity", new ShellReceiver());
-        } catch (TimeoutException e1) {
-            e1.printStackTrace();
-        } catch (AdbCommandRejectedException e1) {
-            e1.printStackTrace();
-        } catch (ShellCommandUnresponsiveException e1) {
-            e1.printStackTrace();
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
+        FunctionsForm form = new FunctionsForm(e);
+        form.show();
+
         Notifications.Bus.notify(
                 new Notification("test", "test notification", "this is test for my plugin " + device.getName(), NotificationType.INFORMATION)
         );
