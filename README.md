@@ -8,6 +8,11 @@ This plugin for Android Studio.
 
 `./gradlew runIdea`
 
+## Issue
+
++ when first running, sometimes plugin can not connect to adb.
+  At the time, control adb connection error. probably using adb location with createBridge may works fine.
+
 ## License
 
 Apache 2.0
