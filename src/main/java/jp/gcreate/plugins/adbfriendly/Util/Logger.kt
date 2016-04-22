@@ -27,11 +27,13 @@ object Logger{
     // TODO: replace to false at release
     private val debug = true
 
+    @JvmStatic
     fun d(clazz: Any, message: String = ""){
         if(!debug) return
         output(clazz, message, "debug")
     }
 
+    @JvmStatic
     fun e(clazz: Any, message: String){
         output(clazz, message, "error")
     }
