@@ -22,6 +22,7 @@ import com.android.ddmlib.IDevice;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.ui.DialogWrapper;
 import jp.gcreate.plugins.adbfriendly.adb.AdbConnector;
+import jp.gcreate.plugins.adbfriendly.funciton.FriendlyFunctions;
 import jp.gcreate.plugins.adbfriendly.funciton.FunctionsCallback;
 
 import javax.swing.*;
@@ -43,8 +44,13 @@ public class FunctionsForm extends DialogWrapper
         setTitle("ADB Friendly");
         // constructor
         connectedDevicesModel = new DefaultListModel();
+        AdbConnector.INSTANCE.addDeviceChangeListener(this);
+        buttonRolling.setAction(new DialogWrapperExitAction("hoge", DialogWrapper.CLOSE_EXIT_CODE));
+        devicesList.setCellRenderer(new DevicesListRenderer());
         init();
+        bindDevicesToList();
     }
+
 
     @Override
     protected JComponent createCenterPanel() {
@@ -59,6 +65,7 @@ public class FunctionsForm extends DialogWrapper
         for (IDevice device : devices) {
             connectedDevicesModel.addElement(device);
         }
+//        devicesList.setModel(new DevicesListModel(devices));
         devicesList.setModel(connectedDevicesModel);
         devicesList.invalidate();
     }
@@ -95,6 +102,14 @@ public class FunctionsForm extends DialogWrapper
     @Override
     public void onCancelled() {
 
+    }
+
+    public class DoFunctionsAction{
+        private FriendlyFunctions functions;
+
+        public DoFunctionsAction(FriendlyFunctions functions) {
+            this.functions = functions;
+        }
     }
 
 }
