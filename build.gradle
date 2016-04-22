@@ -40,7 +40,10 @@ intellij {
     pluginName 'AdbFriendly'
 }
 
-sourceCompatibility = 1.6
+compileJava {
+    sourceCompatibility = 1.6
+    targetCompatibility = 1.6
+}
 
 group 'jp.gcreate'
 version '0.1.0'
