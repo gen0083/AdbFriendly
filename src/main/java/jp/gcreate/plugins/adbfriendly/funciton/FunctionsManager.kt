@@ -81,16 +81,24 @@ object FunctionsManager : IDeviceChangeListener, IClientChangeListener, IDebugBr
         lock.withLock {
             currentFunction = null
         }
+        functionsCallbacks.forEach {
+            it.onDone()
+        }
     }
 
     override fun onErrored() {
         lock.withLock {
             currentFunction = null
         }
+        functionsCallbacks.forEach {
+            it.onErrored()
+        }
     }
 
     override fun onCancelled() {
-        // no-op because calling source is this manager.
+        functionsCallbacks.forEach {
+            it.onCancelled()
+        }
     }
 
     override fun deviceChanged(device: IDevice, changeMask: Int) {
