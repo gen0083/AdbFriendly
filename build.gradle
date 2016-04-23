@@ -36,8 +36,9 @@ apply plugin: 'kotlin'
 
 intellij {
     version 'IC-14.1.4'
-    plugins 'coverage'
-    pluginName 'AdbFriendly'
+    pluginName 'Adb Friendly'
+    updateSinceUntilBuild false
+    sameSinceUntilBuild false
 }
 
 compileJava {
