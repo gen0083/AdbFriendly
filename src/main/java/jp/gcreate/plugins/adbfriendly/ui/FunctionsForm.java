@@ -19,33 +19,26 @@ package jp.gcreate.plugins.adbfriendly.ui;
 
 import com.android.ddmlib.AndroidDebugBridge;
 import com.android.ddmlib.IDevice;
-import com.intellij.notification.Notification;
-import com.intellij.notification.NotificationType;
-import com.intellij.notification.Notifications;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.ui.DialogEarthquakeShaker;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.ValidationInfo;
 import jp.gcreate.plugins.adbfriendly.adb.AdbConnector;
+import jp.gcreate.plugins.adbfriendly.funciton.DeviceScreenRolling;
 import jp.gcreate.plugins.adbfriendly.funciton.FriendlyFunctions;
 import jp.gcreate.plugins.adbfriendly.funciton.FunctionsCallback;
 import jp.gcreate.plugins.adbfriendly.funciton.FunctionsManager;
 import jp.gcreate.plugins.adbfriendly.util.Logger;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class FunctionsForm extends DialogWrapper
         implements FunctionsCallback, AndroidDebugBridge.IDeviceChangeListener {
     private JTextField       rollingCount;
-    private JButton          buttonRolling;
-    private JButton          buttonClose;
     private JCheckBox        showProgressCheckBox;
-    private JLabel           invalidCount;
     private JList            devicesList;
-    private JLabel           devicesNotFound;
-    private JPanel menuWindow;
+    private JLabel           notifyDevicesNotFound;
+    private JPanel           menuWindow;
+    private JLabel           notifyAlreadyRunning;
     private DefaultListModel connectedDevicesModel;
 
     public FunctionsForm(AnActionEvent event) {
@@ -53,30 +46,17 @@ public class FunctionsForm extends DialogWrapper
 
         setTitle("ADB Friendly");
 
-        setListenerOnLaunch();
-
         connectedDevicesModel = new DefaultListModel();
-        buttonRolling.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Logger.d(this, "button rolling clicked.");
-
-                ValidationInfo info = doValidate();
-                if (info != null) {
-                    DialogEarthquakeShaker.shake((JDialog)getPeer().getWindow());
-//                    startTrackingValidation();
-                    initValidation();
-                    return;
-                }
-                Notifications.Bus.notify(new Notification("test", "do action", "pass the validation", NotificationType.INFORMATION));
-            }
-        });
         devicesList.setCellRenderer(new DevicesListRenderer());
-        init();
+
+        setListenerOnLaunch();
         bindDevicesToList();
+        checkRunningTaskExist();
+
+        init();
     }
 
-    public void setListenerOnLaunch(){
+    private void setListenerOnLaunch(){
         AdbConnector.INSTANCE.addDeviceChangeListener(this);
         FunctionsManager.INSTANCE.addFunctionsCallback(this);
     }
@@ -93,22 +73,40 @@ public class FunctionsForm extends DialogWrapper
 
     private void bindDevicesToList() {
         IDevice devices[] = AdbConnector.INSTANCE.getDevices();
-        devicesNotFound.setVisible(devices.length == 0);
-        devicesNotFound.invalidate();
+        notifyDevicesNotFound.setVisible(devices.length == 0);
+        notifyDevicesNotFound.invalidate();
         connectedDevicesModel.clear();
         for (IDevice device : devices) {
             connectedDevicesModel.addElement(device);
         }
-//        devicesList.setModel(new DevicesListModel(devices));
         devicesList.setModel(connectedDevicesModel);
         devicesList.invalidate();
     }
 
-    private void checkRunnningTaskExisit() {
+    private void checkRunningTaskExist() {
         FriendlyFunctions currentFunction = FunctionsManager.INSTANCE.getRunningFunctionOrNull();
-        boolean running = currentFunction != null;
+        boolean isRunning = currentFunction != null;
         // If running functions now then set disable buttons which to run functions.
-        buttonRolling.setEnabled(running);
+        setOKActionEnabled(!isRunning);
+        notifyAlreadyRunning.setVisible(isRunning);
+        notifyAlreadyRunning.invalidate();
+    }
+
+    @Override
+    protected void doOKAction() {
+        int index = devicesList.getSelectedIndex();
+        IDevice device = (IDevice) connectedDevicesModel.getElementAt(index);
+        int count = Integer.parseInt(rollingCount.getText());
+        if (device != null && device.isOnline()) {
+            FunctionsManager.INSTANCE.startFunction(
+                    new DeviceScreenRolling(device,
+                            FunctionsManager.INSTANCE,
+                            count,
+                            showProgressCheckBox.isSelected()
+                            ));
+        }
+
+        dispose();
     }
 
     @Override
@@ -116,6 +114,14 @@ public class FunctionsForm extends DialogWrapper
         Logger.d(this, "validation start");
         if (devicesList.getSelectedIndex() == -1) {
             return new ValidationInfo("Select a target device.", devicesList);
+        }
+        try {
+            int count = Integer.parseInt(rollingCount.getText());
+            if(count <= 0) {
+                return new ValidationInfo("Rotating count must be beggar than 0.", rollingCount);
+            }
+        }catch (NumberFormatException e) {
+            return new ValidationInfo("Rotating count must be digit.", rollingCount);
         }
         return null;
     }
@@ -145,17 +151,17 @@ public class FunctionsForm extends DialogWrapper
      */
     @Override
     public void onDone() {
-        checkRunnningTaskExisit();
+        checkRunningTaskExist();
     }
 
     @Override
     public void onErrored() {
-        checkRunnningTaskExisit();
+        checkRunningTaskExist();
     }
 
     @Override
     public void onCancelled() {
-        checkRunnningTaskExisit();
+        checkRunningTaskExist();
     }
 
     public class DoFunctionsAction{
