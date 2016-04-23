@@ -38,16 +38,25 @@ object AdbConnector : IClientChangeListener, IDeviceChangeListener, IDebugBridge
     fun connectAdb() {
         if (initialized) {
             AndroidDebugBridge.removeClientChangeListener(this)
+            Logger.d(this, "in init already initialized removeClientChangeListener")
             AndroidDebugBridge.removeDebugBridgeChangeListener(this)
+            Logger.d(this, "in init already initialized removeDebugBridgeChangeListener")
             AndroidDebugBridge.removeDeviceChangeListener(this)
+            Logger.d(this, "in init already initialized removeDeviceChangeListener")
             AndroidDebugBridge.terminate()
+            Logger.d(this, "in init already initialized terminate")
         }
         initialized = true
         AndroidDebugBridge.initIfNeeded(false)
+        Logger.d(this, "in init initIfNeeded()")
         AndroidDebugBridge.createBridge()
+        Logger.d(this, "in init createBridge()")
         AndroidDebugBridge.addClientChangeListener(this)
+        Logger.d(this, "in init addClientChangeListener")
         AndroidDebugBridge.addDebugBridgeChangeListener(this)
+        Logger.d(this, "in init addDebugBridgeChangeListener")
         AndroidDebugBridge.addDeviceChangeListener(this)
+        Logger.d(this, "in init addDeviceChangeListener")
     }
 
     fun getAdbBridge(): AndroidDebugBridge {

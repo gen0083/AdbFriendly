@@ -28,6 +28,14 @@ Select your device or emulator, and input rotating count in integer, finally cli
 
 Then target device's screen will rotate automatically.
 
+If devices are not shown on the dialog even through you connect devices, try below please on your terminal.
+
+```
+adb devices
+```
+
+I'll fix it that the plugin reconnect to adb automatically, but now reconnect to adb by yourself sorry :(
+
 ## Development
 
 ### Execute
@@ -44,6 +52,8 @@ Then zip file located to `<project_root>/build/distributions/ADB Friendly-<versi
 
 + when first running, sometimes plugin can not connect to adb.
   At the time, control adb connection error. probably using adb location with createBridge may works fine.
+
+  `Cannot start adb when AndroidDebugBridge is created without the location of adb.`
 
 ## License
 
