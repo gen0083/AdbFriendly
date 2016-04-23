@@ -35,7 +35,7 @@ class DeviceScreenRolling(device: IDevice, callback: FunctionsCallback = Functio
         var errorOutputs: ArrayList<String> = arrayListOf()
         try{
             accelerometerRotation.disableAccelerometerRotation()
-            for(i in 0..times){
+            for(i in 0..times - 1){
                 if(isCancelled || Thread.interrupted()){
                     onCancel(this)
                     throw InterruptedException("Task cancelled")
