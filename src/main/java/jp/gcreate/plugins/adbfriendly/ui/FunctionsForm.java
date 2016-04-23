@@ -1,5 +1,19 @@
 package jp.gcreate.plugins.adbfriendly.ui;
 
+import com.android.ddmlib.AndroidDebugBridge;
+import com.android.ddmlib.IDevice;
+import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.ui.DialogWrapper;
+import com.intellij.openapi.ui.ValidationInfo;
+import jp.gcreate.plugins.adbfriendly.adb.AdbConnector;
+import jp.gcreate.plugins.adbfriendly.funciton.DeviceScreenRolling;
+import jp.gcreate.plugins.adbfriendly.funciton.FriendlyFunctions;
+import jp.gcreate.plugins.adbfriendly.funciton.FunctionsCallback;
+import jp.gcreate.plugins.adbfriendly.funciton.FunctionsManager;
+import jp.gcreate.plugins.adbfriendly.util.Logger;
+
+import javax.swing.*;
+
 /*
  * ADB Friendly
  * Copyright 2016 gen0083
@@ -16,20 +30,6 @@ package jp.gcreate.plugins.adbfriendly.ui;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import com.android.ddmlib.AndroidDebugBridge;
-import com.android.ddmlib.IDevice;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.openapi.ui.ValidationInfo;
-import jp.gcreate.plugins.adbfriendly.adb.AdbConnector;
-import jp.gcreate.plugins.adbfriendly.funciton.DeviceScreenRolling;
-import jp.gcreate.plugins.adbfriendly.funciton.FriendlyFunctions;
-import jp.gcreate.plugins.adbfriendly.funciton.FunctionsCallback;
-import jp.gcreate.plugins.adbfriendly.funciton.FunctionsManager;
-import jp.gcreate.plugins.adbfriendly.util.Logger;
-
-import javax.swing.*;
 
 public class FunctionsForm extends DialogWrapper
         implements FunctionsCallback, AndroidDebugBridge.IDeviceChangeListener {

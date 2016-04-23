@@ -60,14 +60,14 @@ object AdbConnector : IClientChangeListener, IDeviceChangeListener, IDebugBridge
 
     private val clientCallbacks: ArrayList<IClientChangeListener> = arrayListOf()
 
-    fun addClientChangeListener(listener: IClientChangeListener){
-        if(clientCallbacks.contains(listener)) {
+    fun addClientChangeListener(listener: IClientChangeListener) {
+        if (clientCallbacks.contains(listener)) {
             throw IllegalStateException("ClientChangeListener [$listener] is already added. You may forget to remove listener.")
         }
         clientCallbacks.add(listener)
     }
 
-    fun removeClientChangeListener(listener: IClientChangeListener){
+    fun removeClientChangeListener(listener: IClientChangeListener) {
         clientCallbacks.remove(listener)
     }
 
@@ -86,8 +86,8 @@ object AdbConnector : IClientChangeListener, IDeviceChangeListener, IDebugBridge
 
     private val deviceCallbacks: ArrayList<IDeviceChangeListener> = arrayListOf()
 
-    fun addDeviceChangeListener(listener: IDeviceChangeListener){
-        if(deviceCallbacks.contains(listener)) {
+    fun addDeviceChangeListener(listener: IDeviceChangeListener) {
+        if (deviceCallbacks.contains(listener)) {
             throw IllegalStateException("DeviceChangedListener [$listener}] is already added. You may forget to remove listener.")
         }
         deviceCallbacks.add(listener)
@@ -142,7 +142,7 @@ object AdbConnector : IClientChangeListener, IDeviceChangeListener, IDebugBridge
     private val bridgeCallbacks: ArrayList<IDebugBridgeChangeListener> = arrayListOf()
 
     fun addBridgeChangedListener(listener: IDebugBridgeChangeListener) {
-        if(bridgeCallbacks.contains(listener)) {
+        if (bridgeCallbacks.contains(listener)) {
             throw IllegalStateException("DebugBridgeChangedListener [$listener}] is already added. You may forget to remove listener.")
         }
         bridgeCallbacks.add(listener)

@@ -55,7 +55,7 @@ object FunctionsManager : IDeviceChangeListener, IClientChangeListener, IDebugBr
     }
 
     fun cancel() {
-        if(currentFunction == null) return
+        if (currentFunction == null) return
         lock.withLock {
             currentTask.cancel(true)
             currentFunction?.isCancelled = true
@@ -65,7 +65,7 @@ object FunctionsManager : IDeviceChangeListener, IClientChangeListener, IDebugBr
 
     fun getRunningFunctionOrNull(): FriendlyFunctions? {
         lock.withLock {
-            if(currentFunction == null) return null
+            if (currentFunction == null) return null
             return currentFunction
         }
     }
@@ -73,7 +73,7 @@ object FunctionsManager : IDeviceChangeListener, IClientChangeListener, IDebugBr
     private val functionsCallbacks: ArrayList<FunctionsCallback> = arrayListOf()
 
     fun addFunctionsCallback(callback: FunctionsCallback) {
-        if(functionsCallbacks.contains(callback)){
+        if (functionsCallbacks.contains(callback)) {
             Logger.d(this, "Callback is already added. You should forget to remove callback[$callback].")
             throw RuntimeException("Callback is already added. You should forget to remove callback[$callback]")
         }
@@ -113,7 +113,7 @@ object FunctionsManager : IDeviceChangeListener, IClientChangeListener, IDebugBr
 
     override fun deviceChanged(device: IDevice, changeMask: Int) {
         Logger.d(this, "deviceChanged $device changeMask:$changeMask}")
-        if(device.equals(currentFunction?.device)){
+        if (device.equals(currentFunction?.device)) {
             // device status changed
             Logger.d(this, "current device status are changed. $changeMask")
         }

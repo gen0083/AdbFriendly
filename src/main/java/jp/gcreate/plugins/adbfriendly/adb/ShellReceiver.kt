@@ -21,7 +21,7 @@ import com.android.ddmlib.MultiLineReceiver
 import jp.gcreate.plugins.adbfriendly.util.Logger
 
 
-class ShellReceiver() : MultiLineReceiver(){
+class ShellReceiver() : MultiLineReceiver() {
     var cancel: Boolean = false
 
     override fun processNewLines(lines: Array<out String>?) {

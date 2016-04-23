@@ -1,5 +1,11 @@
 package jp.gcreate.plugins.adbfriendly.ui;
 
+import com.android.ddmlib.IDevice;
+import jp.gcreate.plugins.adbfriendly.util.Logger;
+
+import javax.swing.*;
+import java.awt.*;
+
 /*
  * ADB Friendly
  * Copyright 2016 gen0083
@@ -17,12 +23,6 @@ package jp.gcreate.plugins.adbfriendly.ui;
  * limitations under the License.
  */
 
-import com.android.ddmlib.IDevice;
-import jp.gcreate.plugins.adbfriendly.util.Logger;
-
-import javax.swing.*;
-import java.awt.*;
-
 public class DevicesListRenderer extends JLabel implements ListCellRenderer {
     public DevicesListRenderer() {
         super();
@@ -30,13 +30,13 @@ public class DevicesListRenderer extends JLabel implements ListCellRenderer {
     }
 
     @Override
-    public Component getListCellRendererComponent(JList list, Object value, int index,
-                                                  boolean isSelected, boolean cellHasFocus) {
-        if(value instanceof IDevice){
-            IDevice device = (IDevice)value;
-            String name = (device.isEmulator()) ? device.getAvdName() : device.getName();
+    public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
+                                                  boolean cellHasFocus) {
+        if (value instanceof IDevice) {
+            IDevice device = (IDevice) value;
+            String  name   = (device.isEmulator()) ? device.getAvdName() : device.getName();
             setText(name);
-        }else {
+        } else {
             Logger.d(this, "This renderer implements for IDevice but called other models.");
             setText(" something else ");
         }

@@ -22,7 +22,7 @@ import jp.gcreate.plugins.adbfriendly.util.Logger
 import java.util.*
 
 
-abstract class FriendlyFunctions(device: IDevice, callback: FunctionsCallback): Runnable {
+abstract class FriendlyFunctions(device: IDevice, callback: FunctionsCallback) : Runnable {
     lateinit var device: IDevice
     lateinit var callback: FunctionsCallback
     var isCancelled = false
@@ -32,19 +32,19 @@ abstract class FriendlyFunctions(device: IDevice, callback: FunctionsCallback): 
         this.callback = callback
     }
 
-    open fun onSuccess(function: FriendlyFunctions){
+    open fun onSuccess(function: FriendlyFunctions) {
         Logger.d(this, "Function[$function] succeed")
         callback.onDone()
     }
 
-    open fun onError(e: Exception, outputs: ArrayList<String>){
+    open fun onError(e: Exception, outputs: ArrayList<String>) {
         Logger.e(this, "Error: ${e.cause} \n" +
                        "${e.printStackTrace()}\n" +
                        "outputs:${outputs.joinToString("\n")}")
         callback.onErrored()
     }
 
-    open fun onCancel(function: FriendlyFunctions){
+    open fun onCancel(function: FriendlyFunctions) {
         Logger.d(this, "Function[$function] cancelled.")
         callback.onCancelled()
     }

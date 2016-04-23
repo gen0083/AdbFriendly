@@ -33,10 +33,10 @@ class DeviceScreenRolling(device: IDevice, callback: FunctionsCallback = Functio
         val accelerometerRotation = AdbAccelerometerRotation(device)
         val userRotation = AdbUserRotation(device)
         var errorOutputs: ArrayList<String> = arrayListOf()
-        try{
+        try {
             accelerometerRotation.disableAccelerometerRotation()
-            for(i in 0..times - 1){
-                if(isCancelled || Thread.interrupted()){
+            for (i in 0..times - 1) {
+                if (isCancelled || Thread.interrupted()) {
                     onCancel(this)
                     throw InterruptedException("Task cancelled")
                 }
@@ -45,9 +45,9 @@ class DeviceScreenRolling(device: IDevice, callback: FunctionsCallback = Functio
             }
             accelerometerRotation.enableAccelerometerRotation()
             onSuccess(this)
-        }catch(interrepted: InterruptedException){
+        } catch(interrepted: InterruptedException) {
             onError(interrepted, errorOutputs)
-        }finally{
+        } finally {
             accelerometerRotation.enableAccelerometerRotation()
         }
     }

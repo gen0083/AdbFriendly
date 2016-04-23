@@ -48,25 +48,25 @@ class AdbUserRotation(var device: IDevice) {
     }
 
     fun setUserRotationDegree(degree: UserRotationDegree): Boolean {
-        val commandString = if(isExist()) updateCommand(degree) else insertCommand(degree)
+        val commandString = if (isExist()) updateCommand(degree) else insertCommand(degree)
         val outputs = Command(device, commandString).execute()
         val result = outputs.size == 0
         Logger.d(this, "setUserRotationDegree command='$commandString' output='${outputs.joinToString("\n")}' result=$result")
         return result
     }
 
-    fun isExist(): Boolean{
+    fun isExist(): Boolean {
         val outputs = Command(device, COMMAND_QUERY).execute()
         Logger.d(this, "isExist output=${outputs.joinToString("\n")}")
         return (outputs.size == 1 && outputs[0].contains("value="))
     }
 
-    private fun getIntValueFromOutput(output: String): Int{
+    private fun getIntValueFromOutput(output: String): Int {
         val match = regex.find(output)
-        if(match == null){
+        if (match == null) {
             Logger.e(this, "output dose not contain 'value=X'. output=$output")
             throw RuntimeException("output dose not contain 'value=X'. output is '$output'")
-        }else{
+        } else {
             return match.groups[1]!!.value.toInt()
         }
     }
