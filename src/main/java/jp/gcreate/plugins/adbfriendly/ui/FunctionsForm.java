@@ -132,17 +132,32 @@ public class FunctionsForm extends DialogWrapper
      */
     @Override
     public void deviceConnected(IDevice device) {
-        bindDevicesToList();
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                bindDevicesToList();
+            }
+        });
     }
 
     @Override
     public void deviceDisconnected(IDevice device) {
-        bindDevicesToList();
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                bindDevicesToList();
+            }
+        });
     }
 
     @Override
     public void deviceChanged(IDevice device, int changeMask) {
-        bindDevicesToList();
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                bindDevicesToList();
+            }
+        });
     }
 
     /**
@@ -151,17 +166,32 @@ public class FunctionsForm extends DialogWrapper
      */
     @Override
     public void onDone() {
-        checkRunningTaskExist();
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                checkRunningTaskExist();
+            }
+        });
     }
 
     @Override
     public void onErrored() {
-        checkRunningTaskExist();
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                checkRunningTaskExist();
+            }
+        });
     }
 
     @Override
     public void onCancelled() {
-        checkRunningTaskExist();
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                checkRunningTaskExist();
+            }
+        });
     }
 
     public class DoFunctionsAction{

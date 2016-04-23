@@ -21,6 +21,7 @@ import com.android.ddmlib.AndroidDebugBridge
 import com.android.ddmlib.AndroidDebugBridge.*
 import com.android.ddmlib.Client
 import com.android.ddmlib.IDevice
+import jp.gcreate.plugins.adbfriendly.adb.AdbConnector
 import jp.gcreate.plugins.adbfriendly.util.Logger
 import java.util.*
 import java.util.concurrent.ExecutorService
@@ -35,6 +36,12 @@ object FunctionsManager : IDeviceChangeListener, IClientChangeListener, IDebugBr
     private lateinit var currentTask: Future<*>
     private var currentFunction: FriendlyFunctions? = null
     private val lock = ReentrantLock()
+
+    init {
+        AdbConnector.addBridgeChangedListener(this)
+        AdbConnector.addClientChangeListener(this)
+        AdbConnector.addDeviceChangeListener(this)
+    }
 
     fun startFunction(function: FriendlyFunctions) {
         lock.withLock {
@@ -78,6 +85,7 @@ object FunctionsManager : IDeviceChangeListener, IClientChangeListener, IDebugBr
     }
 
     override fun onDone() {
+        Logger.d(this, "function[$currentFunction] is done.")
         lock.withLock {
             currentFunction = null
         }
@@ -87,8 +95,9 @@ object FunctionsManager : IDeviceChangeListener, IClientChangeListener, IDebugBr
     }
 
     override fun onErrored() {
+        Logger.d(this, "function[$currentFunction] is erred.")
         lock.withLock {
-            currentFunction = null
+            cancel()
         }
         functionsCallbacks.forEach {
             it.onErrored()
@@ -96,6 +105,7 @@ object FunctionsManager : IDeviceChangeListener, IClientChangeListener, IDebugBr
     }
 
     override fun onCancelled() {
+        Logger.d(this, "function[$currentFunction] is cancelled.")
         functionsCallbacks.forEach {
             it.onCancelled()
         }
@@ -103,8 +113,9 @@ object FunctionsManager : IDeviceChangeListener, IClientChangeListener, IDebugBr
 
     override fun deviceChanged(device: IDevice, changeMask: Int) {
         Logger.d(this, "deviceChanged $device changeMask:$changeMask}")
-        lock.withLock {
-            currentFunction?.device = device
+        if(device.equals(currentFunction?.device)){
+            // device status changed
+            Logger.d(this, "current device status are changed. $changeMask")
         }
     }
 
@@ -114,6 +125,7 @@ object FunctionsManager : IDeviceChangeListener, IClientChangeListener, IDebugBr
 
     override fun deviceDisconnected(device: IDevice) {
         Logger.d(this, "deviceDisconnected $device")
+        onErrored()
     }
 
     override fun clientChanged(client: Client, changeMask: Int) {
@@ -124,6 +136,7 @@ object FunctionsManager : IDeviceChangeListener, IClientChangeListener, IDebugBr
     override fun bridgeChanged(bridge: AndroidDebugBridge) {
         // maybe not used
         Logger.d(this, "bridgeChanged $bridge")
+        onErrored()
     }
 
 }
