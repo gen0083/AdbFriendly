@@ -24,6 +24,8 @@ import com.android.ddmlib.IDevice
 import com.intellij.notification.Notification
 import com.intellij.notification.NotificationType
 import com.intellij.notification.Notifications
+import com.intellij.openapi.application.ApplicationListener
+import com.intellij.openapi.application.ApplicationManager
 import jp.gcreate.plugins.adbfriendly.util.Logger
 import java.util.*
 
@@ -33,6 +35,32 @@ object AdbConnector : IClientChangeListener, IDeviceChangeListener, IDebugBridge
 
     init {
         connectAdb()
+        ApplicationManager.getApplication().addApplicationListener(object: ApplicationListener{
+            override fun applicationExiting() {
+                AndroidDebugBridge.removeDeviceChangeListener(this@AdbConnector)
+                AndroidDebugBridge.removeClientChangeListener(this@AdbConnector)
+                AndroidDebugBridge.removeDebugBridgeChangeListener(this@AdbConnector)
+                AndroidDebugBridge.terminate()
+            }
+
+            override fun beforeWriteActionStart(action: Any?) {
+                // no-op
+            }
+
+            override fun writeActionStarted(action: Any?) {
+                // no-op
+            }
+
+            override fun writeActionFinished(action: Any?) {
+                // no-op
+            }
+
+            override fun canExitApplication(): Boolean {
+                // no-op
+                return true
+            }
+
+        })
     }
 
     fun connectAdb() {
