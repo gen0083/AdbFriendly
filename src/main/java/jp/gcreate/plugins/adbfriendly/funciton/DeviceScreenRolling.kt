@@ -18,6 +18,10 @@
 package jp.gcreate.plugins.adbfriendly.funciton
 
 import com.android.ddmlib.IDevice
+import com.intellij.notification.Notification
+import com.intellij.notification.NotificationType
+import com.intellij.notification.Notifications
+import com.intellij.openapi.application.ApplicationManager
 import jp.gcreate.plugins.adbfriendly.adb.AdbAccelerometerRotation
 import jp.gcreate.plugins.adbfriendly.adb.AdbUserRotation
 import jp.gcreate.plugins.adbfriendly.adb.UserRotationDegree
@@ -28,14 +32,21 @@ class DeviceScreenRolling(device: IDevice, callback: FunctionsCallback = Functio
                           val times: Int, val showProgress: Boolean = false)
 : FriendlyFunctions(device, callback) {
 
+    companion object {
+        const val NOTIFICATION_ID = "DeviceScreenRolling"
+        const val TITLE = "Screen rolling"
+    }
+
     override fun run() {
         // run rolling function
+        showStartNotification()
         val accelerometerRotation = AdbAccelerometerRotation(device)
         val userRotation = AdbUserRotation(device)
         var errorOutputs: ArrayList<String> = arrayListOf()
         try {
             accelerometerRotation.disableAccelerometerRotation()
             for (i in 0..times - 1) {
+                showProgressNotification(times - i)
                 if (isCancelled || Thread.interrupted()) {
                     onCancel(this)
                     throw InterruptedException("Task cancelled")
@@ -50,5 +61,36 @@ class DeviceScreenRolling(device: IDevice, callback: FunctionsCallback = Functio
         } finally {
             accelerometerRotation.enableAccelerometerRotation()
         }
+    }
+
+    private fun showStartNotification() {
+        ApplicationManager.getApplication().invokeLater {
+            Notifications.Bus.notify(
+                    Notification(NOTIFICATION_ID, TITLE, "Start rotation.", NotificationType.INFORMATION)
+            )
+        }
+    }
+
+    private fun showProgressNotification(count: Int) {
+        if (!showProgress) return
+        ApplicationManager.getApplication().invokeLater {
+            Notifications.Bus.notify(
+                    Notification(NOTIFICATION_ID, TITLE, "Rotation left $count times.", NotificationType.INFORMATION)
+            )
+        }
+    }
+
+    override fun onSuccess(function: FriendlyFunctions) {
+        super.onSuccess(function)
+        Notifications.Bus.notify(
+                Notification(NOTIFICATION_ID, TITLE, "Rotation done.", NotificationType.INFORMATION)
+        )
+    }
+
+    override fun onError(e: Exception, outputs: ArrayList<String>) {
+        super.onError(e, outputs)
+        Notifications.Bus.notify(
+                Notification(NOTIFICATION_ID, TITLE, "Some error happened and stop rotation.", NotificationType.ERROR)
+        )
     }
 }
