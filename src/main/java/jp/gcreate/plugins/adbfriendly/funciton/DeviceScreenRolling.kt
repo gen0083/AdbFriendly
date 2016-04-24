@@ -18,14 +18,13 @@
 package jp.gcreate.plugins.adbfriendly.funciton
 
 import com.android.ddmlib.IDevice
-import com.intellij.notification.NotificationDisplayType
-import com.intellij.notification.NotificationGroup
-import com.intellij.notification.NotificationType
-import com.intellij.notification.Notifications
+import com.intellij.notification.*
 import jp.gcreate.plugins.adbfriendly.adb.AdbAccelerometerRotation
 import jp.gcreate.plugins.adbfriendly.adb.AdbUserRotation
 import jp.gcreate.plugins.adbfriendly.adb.UserRotationDegree
+import jp.gcreate.plugins.adbfriendly.util.Logger
 import java.util.*
+import javax.swing.event.HyperlinkEvent
 
 
 class DeviceScreenRolling(device: IDevice, callback: FunctionsCallback = FunctionsManager,
@@ -38,6 +37,12 @@ class DeviceScreenRolling(device: IDevice, callback: FunctionsCallback = Functio
     }
 
     private val notificationGroup = NotificationGroup(NOTIFICATION_ID, NotificationDisplayType.TOOL_WINDOW, false, NOTIFICATION_ID)
+    private val notificationCancelListener = object : NotificationListener {
+        override fun hyperlinkUpdate(notification: Notification, event: HyperlinkEvent) {
+            Logger.d(this, "hyperlinkUpdate $notification $event")
+            FunctionsManager.cancel()
+        }
+    }
 
     override fun run() {
         // run rolling function
@@ -59,7 +64,7 @@ class DeviceScreenRolling(device: IDevice, callback: FunctionsCallback = Functio
             accelerometerRotation.enableAccelerometerRotation()
             onSuccess(this)
         } catch(interrepted: InterruptedException) {
-            onError(interrepted, errorOutputs)
+            onCancel(this)
         } finally {
             accelerometerRotation.enableAccelerometerRotation()
         }
@@ -67,14 +72,18 @@ class DeviceScreenRolling(device: IDevice, callback: FunctionsCallback = Functio
 
     private fun showStartNotification() {
         Notifications.Bus.notify(
-                notificationGroup.createNotification("Start rotation.", NotificationType.INFORMATION)
+                notificationGroup.createNotification(TITLE,
+                        "Start rotation.<br><a href=\"cancel\">stop function</a>",
+                        NotificationType.INFORMATION,
+                        notificationCancelListener)
         )
     }
 
     private fun showProgressNotification(count: Int) {
         if (!showProgress) return
         Notifications.Bus.notify(
-                notificationGroup.createNotification("Rotation left $count times.", NotificationType.INFORMATION)
+                notificationGroup.createNotification(TITLE, "Rotation left $count times.<br><a href=\"cancel\">stop function</a>",
+                        NotificationType.INFORMATION, notificationCancelListener)
         )
     }
 
@@ -89,6 +98,13 @@ class DeviceScreenRolling(device: IDevice, callback: FunctionsCallback = Functio
         super.onError(e, outputs)
         Notifications.Bus.notify(
                 notificationGroup.createNotification("Some error happened and stop rotation.", NotificationType.ERROR)
+        )
+    }
+
+    override fun onCancel(function: FriendlyFunctions) {
+        super.onCancel(function)
+        Notifications.Bus.notify(
+                notificationGroup.createNotification("Device rotation cancelled.", NotificationType.INFORMATION)
         )
     }
 }
