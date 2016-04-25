@@ -34,9 +34,9 @@ class DeviceScreenRolling(device: IDevice, callback: FunctionsCallback = Functio
     companion object {
         const val NOTIFICATION_ID = "DeviceScreenRolling"
         const val TITLE = "Screen rolling"
+        val notificationGroup = NotificationGroup(NOTIFICATION_ID, NotificationDisplayType.BALLOON, false, NOTIFICATION_ID)
     }
 
-    private val notificationGroup = NotificationGroup(NOTIFICATION_ID, NotificationDisplayType.TOOL_WINDOW, false, NOTIFICATION_ID)
     private val notificationCancelListener = object : NotificationListener {
         override fun hyperlinkUpdate(notification: Notification, event: HyperlinkEvent) {
             Logger.d(this, "hyperlinkUpdate $notification $event")
