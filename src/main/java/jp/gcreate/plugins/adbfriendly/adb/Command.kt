@@ -19,7 +19,6 @@ package jp.gcreate.plugins.adbfriendly.adb
 
 import com.android.ddmlib.IDevice
 import com.android.ddmlib.IShellOutputReceiver
-import com.android.ddmlib.TimeoutException
 import jp.gcreate.plugins.adbfriendly.util.Logger
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -37,7 +36,8 @@ class Command(val device: IDevice,
         while (!finished) {
             if (System.currentTimeMillis() > timeout) {
                 Logger.e(this, "Command timeout ${outputs.joinToString("\n")}")
-                throw TimeoutException("Command timeout.")
+                outputs.add("Command timeout $timeout milliseconds.")
+                return outputs
             }
         }
         return outputs
