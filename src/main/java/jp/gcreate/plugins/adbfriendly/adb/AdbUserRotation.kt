@@ -48,7 +48,7 @@ class AdbUserRotation(var device: IDevice) {
     }
 
     fun setUserRotationDegree(degree: UserRotationDegree): Boolean {
-        val commandString = if (isExist()) updateCommand(degree) else insertCommand(degree)
+        val commandString = insertCommand(degree)
         val outputs = Command(device, commandString).execute()
         val result = outputs.size == 0
         Logger.d(this, "setUserRotationDegree command='$commandString' output='${outputs.joinToString("\n")}' result=$result")

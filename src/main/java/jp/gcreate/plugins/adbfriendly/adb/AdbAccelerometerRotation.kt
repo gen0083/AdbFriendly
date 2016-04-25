@@ -37,16 +37,14 @@ class AdbAccelerometerRotation(var device: IDevice) {
     }
 
     fun enableAccelerometerRotation(): Boolean {
-        val command = if (isAlreadyExist()) COMMAND_UPDATE_ON else COMMAND_INSERT_ON
-        val outputs = Command(device, command).execute()
+        val outputs = Command(device, COMMAND_INSERT_ON).execute()
         val result = outputs.size == 0
         Logger.d(this, "enableAccelerometerRotation output=${outputs.joinToString("\n")} result=$result")
         return result
     }
 
     fun disableAccelerometerRotation(): Boolean {
-        val command = if (isAlreadyExist()) COMMAND_UPDATE_OFF else COMMAND_INSERT_OFF
-        val outputs = Command(device, command).execute()
+        val outputs = Command(device, COMMAND_INSERT_OFF).execute()
         val result = outputs.size == 0
         Logger.d(this, "disableAccelerometerRotation output=${outputs.joinToString("\n")} result=$result")
         return result
