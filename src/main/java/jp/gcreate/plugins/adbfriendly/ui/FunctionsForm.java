@@ -11,8 +11,6 @@ import jp.gcreate.plugins.adbfriendly.funciton.FriendlyFunctions;
 import jp.gcreate.plugins.adbfriendly.funciton.FunctionsCallback;
 import jp.gcreate.plugins.adbfriendly.funciton.FunctionsManager;
 import jp.gcreate.plugins.adbfriendly.util.Logger;
-import jp.gcreate.plugins.adbfriendly.util.PluginConfig;
-import jp.gcreate.plugins.adbfriendly.util.PluginState;
 
 import javax.swing.*;
 
@@ -42,7 +40,6 @@ public class FunctionsForm extends DialogWrapper
     private JPanel           menuWindow;
     private JLabel           notifyAlreadyRunning;
     private DefaultListModel connectedDevicesModel;
-    private PluginConfig     config;
 
     public FunctionsForm(AnActionEvent event) {
         super(event.getProject());
@@ -51,22 +48,12 @@ public class FunctionsForm extends DialogWrapper
 
         connectedDevicesModel = new DefaultListModel();
         devicesList.setCellRenderer(new DevicesListRenderer());
-        config = PluginConfig.getInstance();
 
         setListenerOnLaunch();
         bindDevicesToList();
         checkRunningTaskExist();
 
         init();
-    }
-
-    private PluginState getPluginState() {
-        PluginState state = config.getState();
-        if (state == null) {
-            state = new PluginState();
-            config.loadState(state);
-        }
-        return state;
     }
 
     private void setListenerOnLaunch(){
@@ -89,18 +76,10 @@ public class FunctionsForm extends DialogWrapper
         notifyDevicesNotFound.setVisible(devices.length == 0);
         notifyDevicesNotFound.invalidate();
         connectedDevicesModel.clear();
-        PluginState state = getPluginState();
-        int position = -1;
-        int i = 0;
         for (IDevice device : devices) {
-            if (device.getSerialNumber().equals(state.getDeviceSerial())) {
-                position = i;
-            }
             connectedDevicesModel.addElement(device);
-            i++;
         }
         devicesList.setModel(connectedDevicesModel);
-        devicesList.setSelectedIndex(position);
         devicesList.invalidate();
     }
 
@@ -133,11 +112,8 @@ public class FunctionsForm extends DialogWrapper
     @Override
     protected ValidationInfo doValidate() {
         Logger.d(this, "validation start");
-        PluginState state = getPluginState();
         if (devicesList.getSelectedIndex() == -1) {
             return new ValidationInfo("Select a target device.", devicesList);
-        }else {
-            state.setDeviceSerial(((IDevice)connectedDevicesModel.getElementAt(devicesList.getSelectedIndex())).getSerialNumber());
         }
         try {
             int count = Integer.parseInt(rollingCount.getText());
@@ -147,7 +123,6 @@ public class FunctionsForm extends DialogWrapper
         }catch (NumberFormatException e) {
             return new ValidationInfo("Rotating count must be digit.", rollingCount);
         }
-        config.loadState(state);
         return null;
     }
 

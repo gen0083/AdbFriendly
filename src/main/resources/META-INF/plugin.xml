@@ -44,8 +44,6 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
-        <applicationService serviceInterface="jp.gcreate.plugins.adbfriendly.util.PluginConfig"
-                            serviceImplementation="jp.gcreate.plugins.adbfriendly.util.PluginConfig"/>
     </extensions>
 
     <actions>
