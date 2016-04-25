@@ -21,9 +21,6 @@ import com.android.ddmlib.AndroidDebugBridge
 import com.android.ddmlib.AndroidDebugBridge.*
 import com.android.ddmlib.Client
 import com.android.ddmlib.IDevice
-import com.intellij.notification.Notification
-import com.intellij.notification.NotificationType
-import com.intellij.notification.Notifications
 import com.intellij.openapi.application.ApplicationListener
 import com.intellij.openapi.application.ApplicationManager
 import jp.gcreate.plugins.adbfriendly.util.Logger
@@ -37,10 +34,7 @@ object AdbConnector : IClientChangeListener, IDeviceChangeListener, IDebugBridge
         connectAdb()
         ApplicationManager.getApplication().addApplicationListener(object: ApplicationListener{
             override fun applicationExiting() {
-                AndroidDebugBridge.removeDeviceChangeListener(this@AdbConnector)
-                AndroidDebugBridge.removeClientChangeListener(this@AdbConnector)
-                AndroidDebugBridge.removeDebugBridgeChangeListener(this@AdbConnector)
-                AndroidDebugBridge.terminate()
+                disconnectAdb()
             }
 
             override fun beforeWriteActionStart(action: Any?) {
@@ -65,26 +59,24 @@ object AdbConnector : IClientChangeListener, IDeviceChangeListener, IDebugBridge
 
     fun connectAdb() {
         if (initialized) {
-            AndroidDebugBridge.removeClientChangeListener(this)
-            Logger.d(this, "in init already initialized removeClientChangeListener")
-            AndroidDebugBridge.removeDebugBridgeChangeListener(this)
-            Logger.d(this, "in init already initialized removeDebugBridgeChangeListener")
-            AndroidDebugBridge.removeDeviceChangeListener(this)
-            Logger.d(this, "in init already initialized removeDeviceChangeListener")
-            AndroidDebugBridge.terminate()
-            Logger.d(this, "in init already initialized terminate")
+            disconnectAdb()
         }
         initialized = true
         AndroidDebugBridge.initIfNeeded(false)
-        Logger.d(this, "in init initIfNeeded()")
         AndroidDebugBridge.createBridge()
-        Logger.d(this, "in init createBridge()")
         AndroidDebugBridge.addClientChangeListener(this)
-        Logger.d(this, "in init addClientChangeListener")
         AndroidDebugBridge.addDebugBridgeChangeListener(this)
-        Logger.d(this, "in init addDebugBridgeChangeListener")
         AndroidDebugBridge.addDeviceChangeListener(this)
-        Logger.d(this, "in init addDeviceChangeListener")
+    }
+
+    fun disconnectAdb() {
+        AndroidDebugBridge.removeClientChangeListener(this)
+        clientCallbacks.clear()
+        AndroidDebugBridge.removeDebugBridgeChangeListener(this)
+        bridgeCallbacks.clear()
+        AndroidDebugBridge.removeDeviceChangeListener(this)
+        deviceCallbacks.clear()
+        AndroidDebugBridge.terminate()
     }
 
     fun getAdbBridge(): AndroidDebugBridge {
@@ -104,6 +96,7 @@ object AdbConnector : IClientChangeListener, IDeviceChangeListener, IDebugBridge
         clientCallbacks.add(listener)
     }
 
+    @Suppress("unused")
     fun removeClientChangeListener(listener: IClientChangeListener) {
         clientCallbacks.remove(listener)
     }
@@ -112,12 +105,6 @@ object AdbConnector : IClientChangeListener, IDeviceChangeListener, IDebugBridge
         clientCallbacks.forEach {
             it.clientChanged(client, changeMask)
         }
-        Notifications.Bus.notify(
-                Notification("clientChanged",
-                        "Adb clientChanged",
-                        "client:$client mask:$changeMask",
-                        NotificationType.INFORMATION)
-        )
         Logger.d(this, "clientChanged $client $changeMask")
     }
 
@@ -138,12 +125,6 @@ object AdbConnector : IClientChangeListener, IDeviceChangeListener, IDebugBridge
         deviceCallbacks.forEach {
             it.deviceChanged(device, changeMask)
         }
-        Notifications.Bus.notify(
-                Notification("deviceChanged",
-                        "Adb deviceChanged",
-                        "device:$device mask:$changeMask",
-                        NotificationType.INFORMATION)
-        )
         Logger.d(this, "deviceChanged $device")
     }
 
@@ -151,12 +132,6 @@ object AdbConnector : IClientChangeListener, IDeviceChangeListener, IDebugBridge
         deviceCallbacks.forEach {
             it.deviceConnected(device)
         }
-        Notifications.Bus.notify(
-                Notification("deviceConnected",
-                        "Adb deviceConnected",
-                        "client:$device",
-                        NotificationType.INFORMATION)
-        )
         Logger.d(this, "deviceConnected $device")
     }
 
@@ -164,12 +139,6 @@ object AdbConnector : IClientChangeListener, IDeviceChangeListener, IDebugBridge
         deviceCallbacks.forEach {
             it.deviceDisconnected(device)
         }
-        Notifications.Bus.notify(
-                Notification("deviceDisconnected",
-                        "Adb deviceDisconnected",
-                        "client:$device",
-                        NotificationType.INFORMATION)
-        )
         Logger.d(this, "deviceDisconnected $device")
     }
 
@@ -185,6 +154,7 @@ object AdbConnector : IClientChangeListener, IDeviceChangeListener, IDebugBridge
         bridgeCallbacks.add(listener)
     }
 
+    @Suppress("unused")
     fun removeBridgeChangedListener(listener: IDebugBridgeChangeListener) {
         bridgeCallbacks.remove(listener)
     }
@@ -193,12 +163,6 @@ object AdbConnector : IClientChangeListener, IDeviceChangeListener, IDebugBridge
         bridgeCallbacks.forEach {
             it.bridgeChanged(bridge)
         }
-        Notifications.Bus.notify(
-                Notification("bridgeChanged",
-                        "Adb bridgeChanged",
-                        "client:$bridge",
-                        NotificationType.INFORMATION)
-        )
         Logger.d(this, "bridgeChanged $bridge")
     }
 }

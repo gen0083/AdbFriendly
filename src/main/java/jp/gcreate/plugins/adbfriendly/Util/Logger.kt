@@ -17,6 +17,10 @@
 
 package jp.gcreate.plugins.adbfriendly.util
 
+import com.intellij.notification.NotificationDisplayType
+import com.intellij.notification.NotificationGroup
+import com.intellij.notification.NotificationType
+import com.intellij.notification.Notifications
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -26,6 +30,7 @@ fun Date.toHHMMDD() : String = hhmmddFormat.format(this)
 object Logger{
     // TODO: replace to false at release
     private val debug = true
+    val notificationGroup = NotificationGroup("logger", NotificationDisplayType.NONE, true)
 
     @JvmStatic
     fun d(clazz: Any, message: String = ""){
@@ -39,6 +44,17 @@ object Logger{
     }
 
     private fun output(clazz: Any, message: String, debugType: String){
-        println("[${Date().toHHMMDD()}] (${clazz.javaClass.simpleName}/$debugType) $message")
+        val output = "[${Date().toHHMMDD()}] (${clazz.javaClass.simpleName}/$debugType) $message"
+        if (debug) {
+            val notificationType = when(debugType) {
+                "debug" -> NotificationType.INFORMATION
+                "error" -> NotificationType.ERROR
+                else -> NotificationType.INFORMATION
+            }
+            Notifications.Bus.notify(
+                    notificationGroup.createNotification(output, notificationType)
+            )
+        }
+        println(output)
     }
 }
