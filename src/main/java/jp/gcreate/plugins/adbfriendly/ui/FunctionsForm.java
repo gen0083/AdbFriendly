@@ -189,7 +189,7 @@ public class FunctionsForm extends DialogWrapper
     }
 
     @Override
-    public void onErrored() {
+    public void onErred() {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -207,13 +207,4 @@ public class FunctionsForm extends DialogWrapper
             }
         });
     }
-
-    public class DoFunctionsAction{
-        private FriendlyFunctions functions;
-
-        public DoFunctionsAction(FriendlyFunctions functions) {
-            this.functions = functions;
-        }
-    }
-
 }

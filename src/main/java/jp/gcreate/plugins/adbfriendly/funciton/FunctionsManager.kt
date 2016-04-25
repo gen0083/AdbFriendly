@@ -46,7 +46,7 @@ object FunctionsManager : IDeviceChangeListener, IClientChangeListener, IDebugBr
     fun startFunction(function: FriendlyFunctions) {
         lock.withLock {
             if (currentFunction != null) {
-                Logger.d(this, "Before function[${currentFunction}] is running. So we can not start $function}")
+                Logger.d(this, "Before function[$currentFunction] is running. So we can not start $function")
                 return
             }
             currentFunction = function
@@ -94,13 +94,13 @@ object FunctionsManager : IDeviceChangeListener, IClientChangeListener, IDebugBr
         }
     }
 
-    override fun onErrored() {
+    override fun onErred() {
         Logger.d(this, "function[$currentFunction] is erred.")
         lock.withLock {
             cancel()
         }
         functionsCallbacks.forEach {
-            it.onErrored()
+            it.onErred()
         }
     }
 
@@ -125,7 +125,7 @@ object FunctionsManager : IDeviceChangeListener, IClientChangeListener, IDebugBr
 
     override fun deviceDisconnected(device: IDevice) {
         Logger.d(this, "deviceDisconnected $device")
-        onErrored()
+        onErred()
     }
 
     override fun clientChanged(client: Client, changeMask: Int) {
@@ -136,7 +136,7 @@ object FunctionsManager : IDeviceChangeListener, IClientChangeListener, IDebugBr
     override fun bridgeChanged(bridge: AndroidDebugBridge) {
         // maybe not used
         Logger.d(this, "bridgeChanged $bridge")
-        onErrored()
+        onErred()
     }
 
 }

@@ -64,7 +64,7 @@ class DeviceScreenRolling(device: IDevice, callback: FunctionsCallback = Functio
             }
             accelerometerRotation.enableAccelerometerRotation()
             onSuccess(this)
-        } catch(interrepted: InterruptedException) {
+        } catch(interrupted: InterruptedException) {
             onCancel(this)
         } finally {
             accelerometerRotation.enableAccelerometerRotation()

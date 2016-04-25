@@ -41,7 +41,7 @@ abstract class FriendlyFunctions(device: IDevice, callback: FunctionsCallback) :
         Logger.e(this, "Error: ${e.cause} \n" +
                        "${e.printStackTrace()}\n" +
                        "outputs:${outputs.joinToString("\n")}")
-        callback.onErrored()
+        callback.onErred()
     }
 
     open fun onCancel(function: FriendlyFunctions) {

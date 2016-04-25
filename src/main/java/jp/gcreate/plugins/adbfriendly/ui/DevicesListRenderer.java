@@ -23,8 +23,8 @@ import java.awt.*;
  * limitations under the License.
  */
 
-public class DevicesListRenderer extends JLabel implements ListCellRenderer {
-    public DevicesListRenderer() {
+class DevicesListRenderer extends JLabel implements ListCellRenderer {
+    DevicesListRenderer() {
         super();
         setOpaque(true);
     }

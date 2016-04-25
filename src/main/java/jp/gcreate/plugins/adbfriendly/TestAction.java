@@ -28,6 +28,5 @@ public class TestAction extends AnAction {
         FunctionsForm form = new FunctionsForm(e);
         form.show();
         form.removeListenersOnExit();
-        // get formaction and run command
     }
 }

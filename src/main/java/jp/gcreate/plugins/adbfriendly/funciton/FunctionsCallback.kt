@@ -20,6 +20,6 @@ package jp.gcreate.plugins.adbfriendly.funciton
 
 interface FunctionsCallback {
     fun onDone()
-    fun onErrored()
+    fun onErred()
     fun onCancelled()
 }

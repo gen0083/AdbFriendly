@@ -73,7 +73,7 @@ class DeviceScreenRollingTest {
             latch.countDown()
         }
 
-        override fun onErrored() {
+        override fun onErred() {
             latch.countDown()
         }
 

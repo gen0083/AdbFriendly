@@ -91,6 +91,7 @@
             </constraints>
             <properties>
               <text value=""/>
+              <toolTipText value="input rotate count"/>
             </properties>
           </component>
           <component id="9abc0" class="javax.swing.JLabel">
