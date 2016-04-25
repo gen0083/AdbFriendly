@@ -113,6 +113,11 @@ public class FunctionsForm extends DialogWrapper
                             count,
                             showProgressCheckBox.isSelected()
                             ));
+
+            PluginConfig.INSTANCE.setDeviceSerial(device.getSerialNumber());
+            PluginConfig.INSTANCE.setRotateCount(count);
+            PluginConfig.INSTANCE.setShowProgress(showProgressCheckBox.isSelected());
+            PluginConfig.INSTANCE.save();
         }
 
         dispose();
@@ -123,9 +128,6 @@ public class FunctionsForm extends DialogWrapper
         Logger.d(this, "validation start");
         if (devicesList.getSelectedIndex() == -1) {
             return new ValidationInfo("Select a target device.", devicesList);
-        }else {
-            IDevice device = (IDevice) connectedDevicesModel.getElementAt(devicesList.getSelectedIndex());
-            PluginConfig.INSTANCE.setDeviceSerial(device.getSerialNumber());
         }
         try {
             int count = Integer.parseInt(rollingCount.getText());
@@ -135,7 +137,6 @@ public class FunctionsForm extends DialogWrapper
         }catch (NumberFormatException e) {
             return new ValidationInfo("Rotating count must be digit.", rollingCount);
         }
-        PluginConfig.INSTANCE.save();
         return null;
     }
 
