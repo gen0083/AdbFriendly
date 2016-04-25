@@ -53,6 +53,7 @@ public class FunctionsForm extends DialogWrapper
         setListenerOnLaunch();
         bindDevicesToList();
         checkRunningTaskExist();
+        restorePreviousState();
 
         init();
     }
@@ -70,6 +71,19 @@ public class FunctionsForm extends DialogWrapper
     @Override
     protected JComponent createCenterPanel() {
         return menuWindow;
+    }
+
+    private void restorePreviousState() {
+        int count = PluginConfig.INSTANCE.getRotateCount();
+        if (count > 0) {
+            rollingCount.setText(Integer.toString(count));
+            rollingCount.invalidate();
+        }
+        boolean showProgress = PluginConfig.INSTANCE.getShowProgress();
+        if (showProgress) {
+            showProgressCheckBox.setSelected(true);
+            showProgressCheckBox.invalidate();
+        }
     }
 
     private void bindDevicesToList() {
