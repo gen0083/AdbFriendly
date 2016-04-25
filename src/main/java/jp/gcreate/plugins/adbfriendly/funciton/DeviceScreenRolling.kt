@@ -19,12 +19,12 @@ package jp.gcreate.plugins.adbfriendly.funciton
 
 import com.android.ddmlib.IDevice
 import com.intellij.notification.*
+import com.intellij.openapi.application.ApplicationManager
 import jp.gcreate.plugins.adbfriendly.adb.AdbAccelerometerRotation
 import jp.gcreate.plugins.adbfriendly.adb.AdbUserRotation
 import jp.gcreate.plugins.adbfriendly.adb.UserRotationDegree
 import jp.gcreate.plugins.adbfriendly.util.Logger
 import java.util.*
-import javax.swing.SwingUtilities
 import javax.swing.event.HyperlinkEvent
 
 
@@ -72,7 +72,7 @@ class DeviceScreenRolling(device: IDevice, callback: FunctionsCallback = Functio
     }
 
     private fun showStartNotification() {
-        SwingUtilities.invokeLater {
+        ApplicationManager.getApplication().invokeLater {
             Notifications.Bus.notify(
                     notificationGroup.createNotification(TITLE,
                             "Start rotation.<br><a href=\"cancel\">stop function</a>",
