@@ -11,6 +11,7 @@ import jp.gcreate.plugins.adbfriendly.funciton.FriendlyFunctions;
 import jp.gcreate.plugins.adbfriendly.funciton.FunctionsCallback;
 import jp.gcreate.plugins.adbfriendly.funciton.FunctionsManager;
 import jp.gcreate.plugins.adbfriendly.util.Logger;
+import jp.gcreate.plugins.adbfriendly.util.PluginConfig;
 
 import javax.swing.*;
 
@@ -75,11 +76,19 @@ public class FunctionsForm extends DialogWrapper
         IDevice devices[] = AdbConnector.INSTANCE.getDevices();
         notifyDevicesNotFound.setVisible(devices.length == 0);
         notifyDevicesNotFound.invalidate();
+        int selected = -1;
+        int i = 0;
+        String previousSerial = PluginConfig.INSTANCE.getDeviceSerial();
         connectedDevicesModel.clear();
         for (IDevice device : devices) {
+            if (device.getSerialNumber().equals(previousSerial)) {
+                selected = i;
+            }
             connectedDevicesModel.addElement(device);
+            i++;
         }
         devicesList.setModel(connectedDevicesModel);
+        devicesList.setSelectedIndex(selected);
         devicesList.invalidate();
     }
 
@@ -114,6 +123,9 @@ public class FunctionsForm extends DialogWrapper
         Logger.d(this, "validation start");
         if (devicesList.getSelectedIndex() == -1) {
             return new ValidationInfo("Select a target device.", devicesList);
+        }else {
+            IDevice device = (IDevice) connectedDevicesModel.getElementAt(devicesList.getSelectedIndex());
+            PluginConfig.INSTANCE.setDeviceSerial(device.getSerialNumber());
         }
         try {
             int count = Integer.parseInt(rollingCount.getText());
@@ -123,6 +135,7 @@ public class FunctionsForm extends DialogWrapper
         }catch (NumberFormatException e) {
             return new ValidationInfo("Rotating count must be digit.", rollingCount);
         }
+        PluginConfig.INSTANCE.save();
         return null;
     }
 
