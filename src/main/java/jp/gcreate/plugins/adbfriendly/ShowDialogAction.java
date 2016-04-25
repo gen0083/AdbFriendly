@@ -21,7 +21,7 @@ import jp.gcreate.plugins.adbfriendly.ui.FunctionsForm;
  * limitations under the License.
  */
 
-public class TestAction extends AnAction {
+public class ShowDialogAction extends AnAction {
 
     @Override
     public void actionPerformed(AnActionEvent e) {
