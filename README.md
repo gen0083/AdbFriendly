@@ -3,17 +3,19 @@ ADB Friendly
 
 ADB Friendly is a Android Studio plugin offering some useful functions via ADB.
 
-Now ver0.1, the plugin can rotates screen on connected devices or emulators only.
+Now ver0.1, the plugin can rotate screen on connected devices or emulators only.
 
 ## Functions
 
 ### Screen rotation
 
-refer youtube (I'll add later)
+Refer youtube
+
+<iframe width="640" height="360" src="https://www.youtube.com/embed/GfFcLmkfbTc" frameborder="0" allowfullscreen></iframe>
 
 ## Installation
 
-1. Select Android Studio's menu `Preference > Plugins` then search `ADB Friendly` and install.
+1. ~~Select Android Studio's menu `Preference > Plugins` then search `ADB Friendly` and install.~~
 1. Clone this repository then build and install from zip file. See develop section.
 
 After installation, plugin added on toolbar at the last section.
