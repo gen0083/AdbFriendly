@@ -32,19 +32,16 @@ plugins {
     id "org.jetbrains.intellij" version "0.0.43"
 }
 
-apply plugin: 'java'
+apply plugin: "org.jetbrains.intellij"
 apply plugin: 'kotlin'
 
 intellij {
-    version 'IC-14.1.4'
+    version 'IC-14.1.6'
     pluginName 'Adb Friendly'
     updateSinceUntilBuild false
     sameSinceUntilBuild false
-}
-
-compileJava {
-    sourceCompatibility = 1.6
-    targetCompatibility = 1.6
+    // modify to your Android Studio's path if you want to use a local ide
+    alternativeIdePath "/Applications/Android Studio.app"
 }
 
 group 'jp.gcreate'

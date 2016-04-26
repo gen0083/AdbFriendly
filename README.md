@@ -11,11 +11,11 @@ Now ver0.1, the plugin can rotate screen on connected devices or emulators only.
 
 Refer youtube
 
-<iframe width="640" height="360" src="https://www.youtube.com/embed/GfFcLmkfbTc" frameborder="0" allowfullscreen></iframe>
+[![](http://img.youtube.com/vi/GfFcLmkfbTc/0.jpg)](https://www.youtube.com/watch?v=GfFcLmkfbTc)
 
 ## Installation
 
-1. ~~Select Android Studio's menu `Preference > Plugins` then search `ADB Friendly` and install.~~
+1. ~~Select Android Studio's menu `Preference > Plugins` then search `ADB Friendly` and install.~~(Coming soon)
 1. Clone this repository then build and install from zip file. See develop section.
 
 After installation, plugin added on toolbar at the last section.
@@ -40,15 +40,26 @@ I'll fix it that the plugin reconnect to adb automatically, but now reconnect to
 
 ## Development
 
+`git clone https://github.com/gen0083/AdbFriendly.git`
+
+My developing environment:
+
++ Project SDK: Intellij Platform Plugin SDK with Intellij 14.1.6 (Internal Java Platform 1.6)
++ Develop with IntelliJ 2016.1.1 with JDK 1.8
++ Check with Android Studio 2.0
+
 ### Execute
 
 `./gradlew runIdea`
+
+If you set alternativeIdePath (in build.gradle intellij section) then launch it.
+Otherwise launch IntelliJ 14.1.6.
 
 ### Build zip file
 
 `./gradlew buildPlugin`
 
-Then zip file located to `<project_root>/build/distributions/ADB Friendly-<version>.zip`.
+Zip file located to `<project_root>/build/distributions/ADB Friendly-<version>.zip`.
 
 ## Issue
 
