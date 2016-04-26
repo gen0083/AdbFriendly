@@ -32,7 +32,7 @@ plugins {
     id "org.jetbrains.intellij" version "0.0.43"
 }
 
-apply plugin: "org.jetbrains.intellij"
+apply plugin: "java"
 apply plugin: 'kotlin'
 
 intellij {
@@ -41,7 +41,12 @@ intellij {
     updateSinceUntilBuild false
     sameSinceUntilBuild false
     // modify to your Android Studio's path if you want to use a local ide
-    alternativeIdePath "/Applications/Android Studio.app"
+//    alternativeIdePath "/Applications/Android Studio.app"
+}
+
+compileJava {
+    sourceCompatibility = 1.6
+    targetCompatibility = 1.6
 }
 
 group 'jp.gcreate'

@@ -1,12 +1,8 @@
 ### .gitignore template
 
-# Intellij
-*.iml
 .idea/**/*.xml
 .idea/.name
-!.idea/copyright/*.xml
 !.idea/codeStyleSettings.xml
-!.idea/modules/*.iml
 
 # Gradle files
 .gradle/
@@ -14,3 +10,6 @@ build/
 
 # Local configuration file (sdk path, etc)
 local.properties
+
+# Intellij
+*.iml
