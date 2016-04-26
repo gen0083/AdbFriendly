@@ -25,12 +25,15 @@
     </vendor>
 
     <description><![CDATA[
-      Rotate connected device or emulator through adb.<br>
+    ADB Friendly is a Android Studio plugin to provide some useful functions via ADB.<br>
+    Now ver0.1, the plugin can rotate screen on connected devices or emulators only.
     ]]></description>
 
     <change-notes><![CDATA[
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>
+    <dl>
+        <dt>0.1.0</dt>
+        <dd>Screen rotate function added.</dd>
+    </dl>
     ]]></change-notes>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
@@ -38,9 +41,10 @@
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
-    <!-- uncomment to enable plugin in all products
     <depends>com.intellij.modules.lang</depends>
-    -->
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.androidstudio</depends>
+    <depends>org.jetbrains.android</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
@@ -56,6 +60,12 @@
         >
             <add-to-group group-id="MainToolBar"
                           anchor="last"/>
+        </action>
+        <action class="jp.gcreate.plugins.adbfriendly.ShowDialogAction"
+                id="jp.gcreate.plugins.adbfriendly.ShowDialogActionOnMenu"
+                text="ADB Friendly"
+                description="Show operating dialog"
+                >
             <add-to-group group-id="AndroidToolsGroup"
                           anchor="first"/>
         </action>

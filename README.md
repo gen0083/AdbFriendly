@@ -1,7 +1,7 @@
 ADB Friendly
 ===
 
-ADB Friendly is a Android Studio plugin offering some useful functions via ADB.
+ADB Friendly is a Android Studio plugin to provide some useful functions via ADB.
 
 Now ver0.1, the plugin can rotate screen on connected devices or emulators only.
 
