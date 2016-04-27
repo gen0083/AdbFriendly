@@ -28,7 +28,5 @@ buildscript {
     }
 }
 
-group 'jp.gcreate'
+group groupName
 version '0.1.0'
-
-apply plugin: 'idea'
