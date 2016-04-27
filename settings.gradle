@@ -16,4 +16,5 @@
  */
 
 rootProject.name = 'ADB Friendly'
+include ':plugin'
 
