@@ -32,6 +32,8 @@ plugins {
     id "org.jetbrains.intellij" version "0.0.43"
 }
 
+apply plugin: "idea"
+apply plugin: "org.jetbrains.intellij"
 apply plugin: "java"
 apply plugin: 'kotlin'
 
@@ -42,6 +44,11 @@ intellij {
     sameSinceUntilBuild false
     // modify to your Android Studio's path if you want to use a local ide
 //    alternativeIdePath "/Applications/Android Studio.app"
+    publish {
+        pluginId '8323'
+        username jetbrainsUsername
+        password jetbrainsPassword
+    }
 }
 
 compileJava {
