@@ -36,7 +36,7 @@ class Command(val device: IDevice,
         while (!finished) {
             if (System.currentTimeMillis() > timeout) {
                 Logger.e(this, "Command timeout ${outputs.joinToString("\n")}")
-                outputs.add("Command timeout $timeout milliseconds.")
+                outputs.add(0, "Command timeout $timeout milliseconds.")
                 return outputs
             }
         }
