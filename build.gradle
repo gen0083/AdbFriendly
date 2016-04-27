@@ -32,7 +32,6 @@ plugins {
     id "org.jetbrains.intellij" version "0.0.43"
 }
 
-apply plugin: "idea"
 apply plugin: "org.jetbrains.intellij"
 apply plugin: "java"
 apply plugin: 'kotlin'
