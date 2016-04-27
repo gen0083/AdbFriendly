@@ -21,6 +21,7 @@ import com.android.ddmlib.IDevice
 import com.intellij.notification.*
 import com.intellij.openapi.application.ApplicationManager
 import jp.gcreate.plugins.adbfriendly.adb.AdbAccelerometerRotation
+import jp.gcreate.plugins.adbfriendly.adb.AdbConnector
 import jp.gcreate.plugins.adbfriendly.adb.AdbUserRotation
 import jp.gcreate.plugins.adbfriendly.adb.UserRotationDegree
 import jp.gcreate.plugins.adbfriendly.util.Logger
@@ -28,7 +29,7 @@ import java.util.*
 import javax.swing.event.HyperlinkEvent
 
 
-class DeviceScreenRolling(device: IDevice, callback: FunctionsCallback = FunctionsManager,
+class DeviceScreenRolling(device: IDevice, callback: FunctionsCallback = AdbConnector.functionsManager,
                           val times: Int, val showProgress: Boolean = false)
 : FriendlyFunctions(device, callback) {
 
@@ -41,7 +42,7 @@ class DeviceScreenRolling(device: IDevice, callback: FunctionsCallback = Functio
     private val notificationCancelListener = object : NotificationListener {
         override fun hyperlinkUpdate(notification: Notification, event: HyperlinkEvent) {
             Logger.d(this, "hyperlinkUpdate $notification $event")
-            FunctionsManager.cancel()
+            AdbConnector.functionsManager.cancel()
         }
     }
 

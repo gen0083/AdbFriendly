@@ -23,12 +23,14 @@ import com.android.ddmlib.Client
 import com.android.ddmlib.IDevice
 import com.intellij.openapi.application.ApplicationListener
 import com.intellij.openapi.application.ApplicationManager
+import jp.gcreate.plugins.adbfriendly.funciton.FunctionsManager
 import jp.gcreate.plugins.adbfriendly.util.Logger
 import java.util.*
 
 
 object AdbConnector : IClientChangeListener, IDeviceChangeListener, IDebugBridgeChangeListener {
     private var initialized = false
+    val functionsManager = FunctionsManager()
 
     init {
         connectAdb()
@@ -77,6 +79,10 @@ object AdbConnector : IClientChangeListener, IDeviceChangeListener, IDebugBridge
         AndroidDebugBridge.removeDeviceChangeListener(this)
         deviceCallbacks.clear()
         AndroidDebugBridge.terminate()
+    }
+
+    fun isBridgeConnected(): Boolean {
+        return getAdbBridge().isConnected
     }
 
     fun getAdbBridge(): AndroidDebugBridge {

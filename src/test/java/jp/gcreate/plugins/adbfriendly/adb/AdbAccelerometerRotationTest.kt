@@ -52,7 +52,6 @@ class AdbAccelerometerRotationTest {
         fun tearDownClass() {
             val sut = AdbAccelerometerRotation(AndroidDebugBridge.getBridge().devices[0])
             sut.enableAccelerometerRotation()
-            AndroidDebugBridge.terminate()
         }
     }
 

@@ -55,7 +55,6 @@ class AdbUserRotationTest {
             sut.setUserRotationDegree(UserRotationDegree.DEGREE_0)
             val degree = sut.getUserRotationDegree()
             println("test finished set user_rotation to ${degree.name}")
-            AndroidDebugBridge.terminate()
         }
     }
 
