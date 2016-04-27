@@ -18,7 +18,7 @@
 <idea-plugin version="2">
     <id>jp.gcreate.plugins.adbfriendly</id>
     <name>ADB Friendly</name>
-    <version>1.0</version>
+    <version>0.1.0</version>
     <vendor email="archiherewego@gmail.com"
             url="http://gcreate.jp/">
         G-Create
@@ -26,7 +26,15 @@
 
     <description><![CDATA[
     ADB Friendly is a Android Studio plugin to provide some useful functions via ADB.<br>
-    Now ver0.1, the plugin can rotate screen on connected devices or emulators only.
+    Now ver0.1, the plugin can rotate screen on connected devices or emulators only.<br>
+    <br>
+    Usage:<br>
+    Install the plugin then icon is added to toolbar.<br>
+    If you using Android Studio, added to the menu inside Tools > Android.<br>
+    Click the icon or menu then dialog pop up.<br>
+    <br>
+    If your devices are not shown on the dialog, please try to run some adb command (e.g. "adb devices") from the terminal.
+    (You can use adb command, the plugin can access adb and display devices.)
     ]]></description>
 
     <change-notes><![CDATA[

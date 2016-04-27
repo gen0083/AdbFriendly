@@ -15,16 +15,18 @@ Refer youtube
 
 ## Installation
 
-1. ~~Select Android Studio's menu `Preference > Plugins` then search `ADB Friendly` and install.~~(Coming soon)
+1. Select Android Studio's menu `Preference > Plugins` then search `ADB Friendly` and install.
 1. Clone this repository then build and install from zip file. See develop section.
+1. Download zip file from releases page and install from the file on your IDE.
 
 After installation, plugin added on toolbar at the last section.
+If you use Android Studio, the plugin added into Tools > Android too.
 
 If you don't find it, go to View menu on Android Studio and toggle toolbar.
 
 ## Usage
 
-Click a ADB Friendly icon on Android Studio's toolbar then dialog is shown.
+Click a ADB Friendly icon (or menu) on your IDE's toolbar then dialog is shown.
 
 Select your device or emulator, and input rotating count in integer, finally click OK button.
 
@@ -41,6 +43,8 @@ I'll fix it that the plugin reconnect to adb automatically, but now reconnect to
 ## Development
 
 `git clone https://github.com/gen0083/AdbFriendly.git`
+
+Import the project by gradle project on your IDE.
 
 My developing environment:
 
@@ -59,14 +63,7 @@ Otherwise launch IntelliJ 14.1.6.
 
 `./gradlew buildPlugin`
 
-Zip file located to `<project_root>/build/distributions/ADB Friendly-<version>.zip`.
-
-## Issue
-
-+ when first running, sometimes plugin can not connect to adb.
-  At the time, control adb connection error. probably using adb location with createBridge may works fine.
-
-  `Cannot start adb when AndroidDebugBridge is created without the location of adb.`
+Zip file located to `<project_root>/plugin/build/distributions/ADB Friendly.zip`.
 
 ## License
 
