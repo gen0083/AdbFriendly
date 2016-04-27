@@ -20,10 +20,10 @@ package jp.gcreate.plugins.adbfriendly.function
 import com.android.ddmlib.AndroidDebugBridge
 import com.android.ddmlib.IDevice
 import jp.gcreate.plugins.adbfriendly.adb.AdbAccelerometerRotation
-import jp.gcreate.plugins.adbfriendly.adb.AdbConnector
 import jp.gcreate.plugins.adbfriendly.adb.AdbUserRotation
 import jp.gcreate.plugins.adbfriendly.funciton.DeviceScreenRolling
 import jp.gcreate.plugins.adbfriendly.funciton.FunctionsCallback
+import jp.gcreate.plugins.adbfriendly.funciton.FunctionsManager
 import org.junit.AfterClass
 import org.junit.Assume.assumeTrue
 import org.junit.Before
@@ -58,6 +58,7 @@ class DeviceScreenRollingTest {
         @JvmStatic
         fun tearDownClass() {
             // revert settings to running test
+            AndroidDebugBridge.terminate()
         }
     }
 
@@ -94,7 +95,7 @@ class DeviceScreenRollingTest {
     fun rolling5Times() {
         latch = CountDownLatch(1)
         sut = DeviceScreenRolling(device, callback, 5)
-        AdbConnector.functionsManager.startFunction(sut)
+        FunctionsManager.startFunction(sut)
         latch.await()
         assert(true)
     }
@@ -103,10 +104,10 @@ class DeviceScreenRollingTest {
     fun rollingCancel() {
         latch = CountDownLatch(1)
         sut = DeviceScreenRolling(device, callback, 10)
-        AdbConnector.functionsManager.startFunction(sut)
+        FunctionsManager.startFunction(sut)
         Thread {
             TimeUnit.SECONDS.sleep(5)
-            AdbConnector.functionsManager.cancel()
+            FunctionsManager.cancel()
         }.start()
         latch.await()
         assert(true)
@@ -118,11 +119,11 @@ class DeviceScreenRollingTest {
         sut = DeviceScreenRolling(device, callback, 5)
         val sut2 = DeviceScreenRolling(device, callback, 5)
         var actual: DeviceScreenRolling? = null
-        AdbConnector.functionsManager.startFunction(sut)
+        FunctionsManager.startFunction(sut)
         Thread{
             TimeUnit.SECONDS.sleep(5)
-            AdbConnector.functionsManager.startFunction(sut2)
-            actual = AdbConnector.functionsManager.getRunningFunctionOrNull() as DeviceScreenRolling?
+            FunctionsManager.startFunction(sut2)
+            actual = FunctionsManager.getRunningFunctionOrNull() as DeviceScreenRolling?
         }.start()
         latch.await()
         assertTrue(sut.equals(actual))

@@ -31,7 +31,7 @@ import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
 
-class FunctionsManager : IDeviceChangeListener, IClientChangeListener, IDebugBridgeChangeListener, FunctionsCallback {
+object FunctionsManager : IDeviceChangeListener, IClientChangeListener, IDebugBridgeChangeListener, FunctionsCallback {
     private val executor: ExecutorService = Executors.newSingleThreadExecutor()
     private lateinit var currentTask: Future<*>
     private var currentFunction: FriendlyFunctions? = null

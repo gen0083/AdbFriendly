@@ -28,7 +28,8 @@ val hhmmddFormat : SimpleDateFormat = SimpleDateFormat("HH:mm:ss")
 fun Date.toHHMMDD() : String = hhmmddFormat.format(this)
 
 object Logger{
-    private val debug = false
+    private val debug = true
+    private val showEventLog = false
     val notificationGroup = NotificationGroup("logger", NotificationDisplayType.NONE, true)
 
     @JvmStatic
@@ -44,7 +45,7 @@ object Logger{
 
     private fun output(clazz: Any, message: String, debugType: String){
         val output = "[${Date().toHHMMDD()}] (${clazz.javaClass.simpleName}/$debugType) $message"
-        if (debug) {
+        if (debug && showEventLog) {
             val notificationType = when(debugType) {
                 "debug" -> NotificationType.INFORMATION
                 "error" -> NotificationType.ERROR

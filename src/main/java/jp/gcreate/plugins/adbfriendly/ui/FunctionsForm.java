@@ -9,6 +9,7 @@ import jp.gcreate.plugins.adbfriendly.adb.AdbConnector;
 import jp.gcreate.plugins.adbfriendly.funciton.DeviceScreenRolling;
 import jp.gcreate.plugins.adbfriendly.funciton.FriendlyFunctions;
 import jp.gcreate.plugins.adbfriendly.funciton.FunctionsCallback;
+import jp.gcreate.plugins.adbfriendly.funciton.FunctionsManager;
 import jp.gcreate.plugins.adbfriendly.util.Logger;
 import jp.gcreate.plugins.adbfriendly.util.PluginConfig;
 
@@ -59,12 +60,12 @@ public class FunctionsForm extends DialogWrapper
 
     private void setListenerOnLaunch(){
         AdbConnector.INSTANCE.addDeviceChangeListener(this);
-        AdbConnector.INSTANCE.getFunctionsManager().addFunctionsCallback(this);
+        FunctionsManager.INSTANCE.addFunctionsCallback(this);
     }
 
     public void removeListenersOnExit() {
         AdbConnector.INSTANCE.removeDeviceChangedListener(this);
-        AdbConnector.INSTANCE.getFunctionsManager().removeFunctionsCallbacks(this);
+        FunctionsManager.INSTANCE.removeFunctionsCallbacks(this);
     }
 
     @Override
@@ -106,7 +107,7 @@ public class FunctionsForm extends DialogWrapper
     }
 
     private void checkRunningTaskExist() {
-        FriendlyFunctions currentFunction = AdbConnector.INSTANCE.getFunctionsManager().getRunningFunctionOrNull();
+        FriendlyFunctions currentFunction = FunctionsManager.INSTANCE.getRunningFunctionOrNull();
         boolean isRunning = currentFunction != null;
         // If running functions now then set disable buttons which to run functions.
         setOKActionEnabled(!isRunning);
@@ -120,9 +121,9 @@ public class FunctionsForm extends DialogWrapper
         IDevice device = (IDevice) connectedDevicesModel.getElementAt(index);
         int count = Integer.parseInt(rollingCount.getText());
         if (device != null && device.isOnline()) {
-            AdbConnector.INSTANCE.getFunctionsManager().startFunction(
+            FunctionsManager.INSTANCE.startFunction(
                     new DeviceScreenRolling(device,
-                            AdbConnector.INSTANCE.getFunctionsManager(),
+                            FunctionsManager.INSTANCE,
                             count,
                             showProgressCheckBox.isSelected()
                             ));
