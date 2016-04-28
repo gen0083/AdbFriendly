@@ -39,4 +39,13 @@ class ShellCommandTest {
         assertThat(result, notNullValue())
         assertThat(result, instanceOf(String::class.java))
     }
+
+    @Test
+    fun getAdbPath() {
+        val command = WhichAdb()
+        val path = command.getAdbPath()
+        println(path)
+        assertThat(path, notNullValue())
+        assertThat(path, instanceOf(String::class.java))
+    }
 }

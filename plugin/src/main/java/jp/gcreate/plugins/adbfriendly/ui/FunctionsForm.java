@@ -14,6 +14,9 @@ import jp.gcreate.plugins.adbfriendly.util.Logger;
 import jp.gcreate.plugins.adbfriendly.util.PluginConfig;
 
 import javax.swing.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 /*
  * ADB Friendly
@@ -40,6 +43,9 @@ public class FunctionsForm extends DialogWrapper
     private JLabel           notifyDevicesNotFound;
     private JPanel           menuWindow;
     private JLabel           notifyAlreadyRunning;
+    private JPanel           adbConnectedPanel;
+    private JLabel           adbConnectedText;
+    private JButton          adbConnectButton;
     private DefaultListModel connectedDevicesModel;
 
     public FunctionsForm(AnActionEvent event) {
@@ -50,6 +56,7 @@ public class FunctionsForm extends DialogWrapper
         connectedDevicesModel = new DefaultListModel();
         devicesList.setCellRenderer(new DevicesListRenderer());
 
+        checkAdbConnection();
         setListenerOnLaunch();
         bindDevicesToList();
         checkRunningTaskExist();
@@ -71,6 +78,40 @@ public class FunctionsForm extends DialogWrapper
     @Override
     protected JComponent createCenterPanel() {
         return menuWindow;
+    }
+
+    private void checkAdbConnection() {
+        boolean connected = AdbConnector.INSTANCE.isAdbConnected();
+        adbConnectedPanel.setVisible(!connected);
+        if (!connected) {
+//            WhichAdb adb = new WhichAdb();
+//            String path = adb.getAdbPath();
+            String path = getAdbPath();
+            Logger.d(this, "path is " + path);
+            if (!path.contains("timeout")) {
+                AdbConnector.INSTANCE.connectAdb(path);
+            }
+        }
+    }
+
+    private String getAdbPath() {
+        String output = "";
+        try {
+            ProcessBuilder builder = new ProcessBuilder("/bin/sh", "-c", "which", "adb");
+            Process p = builder.start();
+            p.waitFor();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            String line = "";
+            while ((line = reader.readLine()) != null) {
+                Logger.d(this, "readLine " + line);
+                 output += line + "\n";
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return output;
     }
 
     private void restorePreviousState() {

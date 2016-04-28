@@ -29,6 +29,9 @@ import java.util.*
 
 object AdbConnector : IClientChangeListener, IDeviceChangeListener, IDebugBridgeChangeListener {
     private var initialized = false
+    private val clientCallbacks: ArrayList<IClientChangeListener> = arrayListOf()
+    private val deviceCallbacks: ArrayList<IDeviceChangeListener> = arrayListOf()
+    private val bridgeCallbacks: ArrayList<IDebugBridgeChangeListener> = arrayListOf()
 
     init {
         connectAdb()
@@ -69,6 +72,18 @@ object AdbConnector : IClientChangeListener, IDeviceChangeListener, IDebugBridge
         AndroidDebugBridge.addDeviceChangeListener(this)
     }
 
+    fun connectAdb(path: String) {
+        if (initialized) {
+            disconnectAdb()
+        }
+        initialized = true
+        AndroidDebugBridge.initIfNeeded(false)
+        AndroidDebugBridge.createBridge(path, false)
+        AndroidDebugBridge.addClientChangeListener(this)
+        AndroidDebugBridge.addDebugBridgeChangeListener(this)
+        AndroidDebugBridge.addDeviceChangeListener(this)
+    }
+
     fun disconnectAdb() {
         AndroidDebugBridge.removeClientChangeListener(this)
         clientCallbacks.clear()
@@ -79,6 +94,10 @@ object AdbConnector : IClientChangeListener, IDeviceChangeListener, IDebugBridge
         AndroidDebugBridge.terminate()
     }
 
+    fun isAdbConnected(): Boolean {
+        return getAdbBridge().isConnected
+    }
+
     fun getAdbBridge(): AndroidDebugBridge {
         return AndroidDebugBridge.getBridge()
     }
@@ -86,8 +105,6 @@ object AdbConnector : IClientChangeListener, IDeviceChangeListener, IDebugBridge
     fun getDevices(): Array<IDevice> {
         return getAdbBridge().devices
     }
-
-    private val clientCallbacks: ArrayList<IClientChangeListener> = arrayListOf()
 
     fun addClientChangeListener(listener: IClientChangeListener) {
         if (clientCallbacks.contains(listener)) {
@@ -107,8 +124,6 @@ object AdbConnector : IClientChangeListener, IDeviceChangeListener, IDebugBridge
         }
         Logger.d(this, "clientChanged $client $changeMask")
     }
-
-    private val deviceCallbacks: ArrayList<IDeviceChangeListener> = arrayListOf()
 
     fun addDeviceChangeListener(listener: IDeviceChangeListener) {
         if (deviceCallbacks.contains(listener)) {
@@ -145,8 +160,6 @@ object AdbConnector : IClientChangeListener, IDeviceChangeListener, IDebugBridge
     /**
      * If AndroidDebugBridge is changed then notify this callback.
      */
-    private val bridgeCallbacks: ArrayList<IDebugBridgeChangeListener> = arrayListOf()
-
     fun addBridgeChangedListener(listener: IDebugBridgeChangeListener) {
         if (bridgeCallbacks.contains(listener)) {
             throw IllegalStateException("DebugBridgeChangedListener [$listener}] is already added. You may forget to remove listener.")

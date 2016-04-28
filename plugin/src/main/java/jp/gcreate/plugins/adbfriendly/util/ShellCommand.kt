@@ -38,6 +38,7 @@ class ShellCommand {
                     }
                 }
                 succeed = true
+                input.close()
                 break@waiting
             }
             if (!succeed) {
