@@ -2,7 +2,12 @@ package jp.gcreate.plugins.adbfriendly.ui;
 
 import com.android.ddmlib.AndroidDebugBridge;
 import com.android.ddmlib.IDevice;
+import com.intellij.execution.ExecutionException;
+import com.intellij.execution.OutputListener;
+import com.intellij.execution.configurations.GeneralCommandLine;
+import com.intellij.execution.process.OSProcessHandler;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.ValidationInfo;
 import jp.gcreate.plugins.adbfriendly.adb.AdbConnector;
@@ -14,9 +19,6 @@ import jp.gcreate.plugins.adbfriendly.util.Logger;
 import jp.gcreate.plugins.adbfriendly.util.PluginConfig;
 
 import javax.swing.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 
 /*
  * ADB Friendly
@@ -47,11 +49,14 @@ public class FunctionsForm extends DialogWrapper
     private JLabel           adbConnectedText;
     private JButton          adbConnectButton;
     private DefaultListModel connectedDevicesModel;
+    private Project project;
 
     public FunctionsForm(AnActionEvent event) {
         super(event.getProject());
 
         setTitle("ADB Friendly");
+
+        project = event.getProject();
 
         connectedDevicesModel = new DefaultListModel();
         devicesList.setCellRenderer(new DevicesListRenderer());
@@ -97,18 +102,19 @@ public class FunctionsForm extends DialogWrapper
     private String getAdbPath() {
         String output = "";
         try {
-            ProcessBuilder builder = new ProcessBuilder("/bin/sh", "-c", "which", "adb");
-            Process p = builder.start();
-            p.waitFor();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            String line = "";
-            while ((line = reader.readLine()) != null) {
-                Logger.d(this, "readLine " + line);
-                 output += line + "\n";
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+            GeneralCommandLine commandLine = new GeneralCommandLine("/bin/sh", "-c", "which", "-a", "adb", " ");
+            OSProcessHandler handler = new OSProcessHandler(commandLine);
+            StringBuilder outContent = new StringBuilder();
+            StringBuilder errContent = new StringBuilder();
+
+            handler.addProcessListener(new OutputListener(outContent, errContent));
+
+            handler.startNotify();
+            handler.waitFor();
+            int exitCode = handler.getProcess().exitValue();
+
+            output = outContent.toString();
+        } catch (ExecutionException e) {
             e.printStackTrace();
         }
         return output;
