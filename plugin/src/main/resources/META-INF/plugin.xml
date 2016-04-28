@@ -15,7 +15,7 @@
   ~ limitations under the License.
   -->
 
-<idea-plugin version="2">
+<idea-plugin version="2" url="https://github.com/gen0083/AdbFriendly">
     <id>jp.gcreate.plugins.adbfriendly</id>
     <name>ADB Friendly</name>
     <version>0.1.0</version>
