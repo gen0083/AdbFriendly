@@ -46,7 +46,16 @@ I'll fix it that the plugin reconnect to adb automatically, but now reconnect to
 
 Import the project by gradle project on your IDE.
 
-My developing environment:
+### Optional
+
+Modify to plugin project will be useful.
+
+1. Open `.idea/modules/plugin/plugin.iml` and `.idea/modules/plugin/plugin_main.iml`. (If you don't find it then close and reopen project.)
+1. Replace 'JAVA_MODULE' to 'PLUGIN_MODULE'. (It is type attribute in module tag.)
+1. Close project and reopen project.
+1. You can use wizard to add Action etc.
+
+### My developing environment
 
 + Project SDK: Intellij Platform Plugin SDK with Intellij 14.1.6 (Internal Java Platform 1.6)
 + Develop with IntelliJ 2016.1.1 with JDK 1.8
