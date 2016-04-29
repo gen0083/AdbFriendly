@@ -23,16 +23,19 @@ object PluginConfig {
     const val DEVICE_SERIAL = "jp.gcreate.plugins.adbfriendly.device_serial"
     const val ROTATE_COUNT = "jp.gcreate.plugins.adbfriendly.rotate_count"
     const val SHOW_PROGRESS = "jp.gcreate.plugins.adbfriendly.show_progress"
+    const val ADB_PATH = "jp.gcreate.plugins.adbfriendly.adb_path"
 
     var deviceSerial: String = ""
     var rotateCount: Int = 0
     var showProgress: Boolean = false
+    var adbPath: String = ""
 
     init {
         val component = PropertiesComponent.getInstance()
         deviceSerial = component.getValue(DEVICE_SERIAL, "")
         rotateCount = component.getOrInitInt(ROTATE_COUNT, 0)
         showProgress = component.getBoolean(SHOW_PROGRESS, false)
+        adbPath = component.getValue(ADB_PATH, "")
     }
 
     fun save() {
@@ -41,6 +44,7 @@ object PluginConfig {
             setValue(DEVICE_SERIAL, deviceSerial)
             setValue(ROTATE_COUNT, rotateCount.toString())
             setValue(SHOW_PROGRESS, showProgress.toString())
+            setValue(ADB_PATH, adbPath)
         }
     }
 }
