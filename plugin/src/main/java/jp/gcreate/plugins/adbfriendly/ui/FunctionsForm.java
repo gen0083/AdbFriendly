@@ -2,10 +2,6 @@ package jp.gcreate.plugins.adbfriendly.ui;
 
 import com.android.ddmlib.AndroidDebugBridge;
 import com.android.ddmlib.IDevice;
-import com.intellij.execution.ExecutionException;
-import com.intellij.execution.OutputListener;
-import com.intellij.execution.configurations.GeneralCommandLine;
-import com.intellij.execution.process.OSProcessHandler;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
@@ -100,27 +96,6 @@ public class FunctionsForm extends DialogWrapper
                 AdbConnector.INSTANCE.connectAdb(path);
             }
         }
-    }
-
-    private String getAdbPath() {
-        String output = "";
-        try {
-            GeneralCommandLine commandLine = new GeneralCommandLine("/bin/sh", "-c", "which", "-a", "adb", " ");
-            OSProcessHandler handler = new OSProcessHandler(commandLine);
-            StringBuilder outContent = new StringBuilder();
-            StringBuilder errContent = new StringBuilder();
-
-            handler.addProcessListener(new OutputListener(outContent, errContent));
-
-            handler.startNotify();
-            handler.waitFor();
-            int exitCode = handler.getProcess().exitValue();
-
-            output = outContent.toString();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-        return output;
     }
 
     private void restorePreviousState() {

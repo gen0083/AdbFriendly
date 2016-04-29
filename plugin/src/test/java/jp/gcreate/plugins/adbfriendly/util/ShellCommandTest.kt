@@ -41,11 +41,14 @@ class ShellCommandTest {
     }
 
     @Test
-    fun getAdbPath() {
-        val command = WhichAdb()
-        val path = command.getAdbPath()
-        println(path)
-        assertThat(path, notNullValue())
-        assertThat(path, instanceOf(String::class.java))
+    fun checkEnv() {
+        val command = ShellCommand()
+        val result = command.executeCommand("env")
+        println(result)
+        assertThat(result, notNullValue())
+        assertThat(result, instanceOf(String::class.java))
+        val com = ShellCommand()
+        val ac = com.executeCommand("who")
+        println("who is :$ac")
     }
 }

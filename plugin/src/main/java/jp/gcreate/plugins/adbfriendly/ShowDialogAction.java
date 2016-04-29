@@ -3,6 +3,8 @@ package jp.gcreate.plugins.adbfriendly;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import jp.gcreate.plugins.adbfriendly.ui.FunctionsForm;
+import jp.gcreate.plugins.adbfriendly.util.Logger;
+import jp.gcreate.plugins.adbfriendly.util.ShellCommand;
 
 /*
  * ADB Friendly
@@ -25,6 +27,17 @@ public class ShowDialogAction extends AnAction {
 
     @Override
     public void actionPerformed(AnActionEvent e) {
+        // TODO: remove this for release time (this is for debugging)
+        ShellCommand command = new ShellCommand();
+        String path = command.executeCommand("env", 20000L);
+        Logger.d(this, "path is " + path);
+        command = new ShellCommand();
+        path = command.executeCommand("who", 20000L);
+        Logger.d(this, "source command done " + path);
+        command = new ShellCommand();
+        path = command.executeCommand("env", 20000L);
+        Logger.d(this, "after source path is :" + path);
+
         FunctionsForm form = new FunctionsForm(e);
         form.show();
         form.removeListenersOnExit();
