@@ -38,7 +38,8 @@ import javax.swing.*;
  */
 
 public class FunctionsForm extends DialogWrapper
-        implements FunctionsCallback, AndroidDebugBridge.IDeviceChangeListener {
+        implements FunctionsCallback, AndroidDebugBridge.IDeviceChangeListener,
+        AndroidDebugBridge.IDebugBridgeChangeListener {
     private JTextField       rollingCount;
     private JCheckBox        showProgressCheckBox;
     private JList            devicesList;
@@ -72,10 +73,12 @@ public class FunctionsForm extends DialogWrapper
 
     private void setListenerOnLaunch(){
         AdbConnector.INSTANCE.addDeviceChangeListener(this);
+        AdbConnector.INSTANCE.addBridgeChangedListener(this);
         FunctionsManager.INSTANCE.addFunctionsCallback(this);
     }
 
     public void removeListenersOnExit() {
+        AdbConnector.INSTANCE.removeDeviceChangedListener(this);
         AdbConnector.INSTANCE.removeDeviceChangedListener(this);
         FunctionsManager.INSTANCE.removeFunctionsCallbacks(this);
     }
@@ -91,7 +94,7 @@ public class FunctionsForm extends DialogWrapper
         if (!connected) {
 //            WhichAdb adb = new WhichAdb();
 //            String path = adb.getAdbPath();
-            String path = getAdbPath();
+            String path = "/Applications/android-sdk/platform-tools/adb";
             Logger.d(this, "path is " + path);
             if (!path.contains("timeout")) {
                 AdbConnector.INSTANCE.connectAdb(path);
@@ -265,6 +268,16 @@ public class FunctionsForm extends DialogWrapper
             @Override
             public void run() {
                 checkRunningTaskExist();
+            }
+        });
+    }
+
+    @Override
+    public void bridgeChanged(AndroidDebugBridge bridge) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                checkAdbConnection();
             }
         });
     }
