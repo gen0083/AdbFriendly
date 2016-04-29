@@ -13,6 +13,7 @@ import jp.gcreate.plugins.adbfriendly.funciton.FunctionsCallback;
 import jp.gcreate.plugins.adbfriendly.funciton.FunctionsManager;
 import jp.gcreate.plugins.adbfriendly.util.Logger;
 import jp.gcreate.plugins.adbfriendly.util.PluginConfig;
+import jp.gcreate.plugins.adbfriendly.util.ShellCommand;
 
 import javax.swing.*;
 
@@ -90,7 +91,10 @@ public class FunctionsForm extends DialogWrapper
         if (!connected) {
 //            WhichAdb adb = new WhichAdb();
 //            String path = adb.getAdbPath();
-            String path = "/Applications/android-sdk/platform-tools/adb";
+            String path = PluginConfig.ADB_PATH;
+            if (path.equals("")) {
+                path = new ShellCommand().executeCommand("which adb");
+            }
             Logger.d(this, "path is " + path);
             if (!path.contains("timeout")) {
                 AdbConnector.INSTANCE.connectAdb(path);

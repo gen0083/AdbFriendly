@@ -17,38 +17,45 @@
 
 package jp.gcreate.plugins.adbfriendly.util
 
+import com.intellij.execution.OutputListener
+import com.intellij.execution.configurations.GeneralCommandLine
+import com.intellij.execution.process.OSProcessHandler
+import java.util.concurrent.ExecutionException
 import java.util.concurrent.TimeUnit
 
 class ShellCommand {
-    var output: String = ""
-    var succeed = false
+    @JvmOverloads
+    fun executeCommand(command: String, timeoutSeconds: Long = 2): String {
+        val outContent = StringBuilder()
+        val errContent = StringBuilder()
+        val splitedCommand: MutableList<String> = if(command.contains(" ")) command.split(" ").toMutableList() else mutableListOf(command)
+        val commandLine = GeneralCommandLine(splitedCommand)
+        val handler = OSProcessHandler(commandLine)
 
-    fun executeCommand(command: String, timeout: Long = TimeUnit.SECONDS.toMillis(2)): String {
-        val timelimit = System.currentTimeMillis() + timeout
         try {
-            waiting@while(System.currentTimeMillis() < timelimit) {
-                val process = Runtime.getRuntime().exec(command)
-                process.waitFor()
-                val input = process.inputStream
-                input.bufferedReader().useLines {
-                    it.forEach {
-                        var str = it
-                        output += str
-                        Logger.d(this, "readLine :$str")
-                    }
-                }
-                succeed = true
-                input.close()
-                break@waiting
-            }
-            if (!succeed) {
-                Logger.e(this, "executeComand timeout:$output")
-                return "Command timeout\n" + output
-            }
-        }catch (e: Exception) {
-            Logger.e(this, "executeCommand erred:${e.message}")
-            return "Command error:" + e.message + "\n$output"
+            handler.addProcessListener(OutputListener(outContent, errContent))
+
+            handler.startNotify()
+            handler.waitFor(TimeUnit.SECONDS.toMillis(timeoutSeconds))
+            // check exit code to detect process finished or still running
+            val exitCode = handler.process.exitValue();
+        }catch (e: ExecutionException) {
+            return outputErrorLog("error", e, outContent, errContent)
+        }catch (e: InterruptedException) {
+            return outputErrorLog("timeout", e, outContent, errContent)
+        }catch (e: IllegalThreadStateException){
+            return outputErrorLog("timeout", e, outContent, errContent)
         }
-        return output
+        return outContent.toString()
+    }
+
+    private fun outputErrorLog(cause: String, exception: Exception, output:StringBuilder, errorOutput: StringBuilder)
+            :String {
+        val str = "Command $cause: ${exception.message} \n" +
+                  "${exception.stackTrace.joinToString("\n")}\n" +
+                  " output:$output\n" +
+                  " error:$errorOutput"
+        Logger.e(this, str)
+        return str
     }
 }

@@ -29,13 +29,13 @@ public class ShowDialogAction extends AnAction {
     public void actionPerformed(AnActionEvent e) {
         // TODO: remove this for release time (this is for debugging)
         ShellCommand command = new ShellCommand();
-        String path = command.executeCommand("env", 20000L);
+        String path = command.executeCommand("env");
         Logger.d(this, "path is " + path);
         command = new ShellCommand();
-        path = command.executeCommand("who", 20000L);
+        path = command.executeCommand("who");
         Logger.d(this, "source command done " + path);
         command = new ShellCommand();
-        path = command.executeCommand("env", 20000L);
+        path = command.executeCommand("env");
         Logger.d(this, "after source path is :" + path);
 
         FunctionsForm form = new FunctionsForm(e);
