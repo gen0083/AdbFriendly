@@ -37,7 +37,8 @@ object AdbConnector : IClientChangeListener, IDeviceChangeListener, IDebugBridge
         connectAdb()
         ApplicationManager.getApplication().addApplicationListener(object: ApplicationListener{
             override fun applicationExiting() {
-                disconnectAdb()
+                removeListener()
+                AndroidDebugBridge.terminate()
             }
 
             override fun beforeWriteActionStart(action: Any?) {
@@ -62,7 +63,7 @@ object AdbConnector : IClientChangeListener, IDeviceChangeListener, IDebugBridge
 
     fun connectAdb() {
         if (initialized) {
-            disconnectAdb()
+            removeListener()
         }
         initialized = true
         AndroidDebugBridge.initIfNeeded(false)
@@ -74,24 +75,20 @@ object AdbConnector : IClientChangeListener, IDeviceChangeListener, IDebugBridge
 
     fun connectAdb(path: String) {
         if (initialized) {
-            disconnectAdb()
+            removeListener()
         }
         initialized = true
         AndroidDebugBridge.initIfNeeded(false)
-        AndroidDebugBridge.createBridge(path, false)
+        AndroidDebugBridge.createBridge(path, true)
         AndroidDebugBridge.addClientChangeListener(this)
         AndroidDebugBridge.addDebugBridgeChangeListener(this)
         AndroidDebugBridge.addDeviceChangeListener(this)
     }
 
-    fun disconnectAdb() {
+    fun removeListener() {
         AndroidDebugBridge.removeClientChangeListener(this)
-        clientCallbacks.clear()
         AndroidDebugBridge.removeDebugBridgeChangeListener(this)
-        bridgeCallbacks.clear()
         AndroidDebugBridge.removeDeviceChangeListener(this)
-        deviceCallbacks.clear()
-        AndroidDebugBridge.terminate()
     }
 
     fun isAdbConnected(): Boolean {

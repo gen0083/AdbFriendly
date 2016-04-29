@@ -21,6 +21,8 @@ import com.android.ddmlib.AndroidDebugBridge
 import com.android.ddmlib.AndroidDebugBridge.*
 import com.android.ddmlib.Client
 import com.android.ddmlib.IDevice
+import com.intellij.openapi.application.ApplicationListener
+import com.intellij.openapi.application.ApplicationManager.getApplication
 import jp.gcreate.plugins.adbfriendly.adb.AdbConnector
 import jp.gcreate.plugins.adbfriendly.util.Logger
 import java.util.*
@@ -41,6 +43,31 @@ object FunctionsManager : IDeviceChangeListener, IClientChangeListener, IDebugBr
         AdbConnector.addBridgeChangedListener(this)
         AdbConnector.addClientChangeListener(this)
         AdbConnector.addDeviceChangeListener(this)
+        getApplication().addApplicationListener(object: ApplicationListener {
+            override fun applicationExiting() {
+                AdbConnector.removeBridgeChangedListener(this@FunctionsManager)
+                AdbConnector.removeClientChangeListener(this@FunctionsManager)
+                AdbConnector.removeDeviceChangedListener(this@FunctionsManager)
+            }
+
+            override fun beforeWriteActionStart(action: Any?) {
+                // no-op
+            }
+
+            override fun writeActionStarted(action: Any?) {
+                // no-op
+            }
+
+            override fun writeActionFinished(action: Any?) {
+                // no-op
+            }
+
+            override fun canExitApplication(): Boolean {
+                // no-op
+                return true
+            }
+
+        })
     }
 
     fun startFunction(function: FriendlyFunctions) {
