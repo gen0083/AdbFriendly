@@ -46,8 +46,8 @@ class ShellCommand {
                 return "Command timeout\n" + output
             }
         }catch (e: Exception) {
-            Logger.e(this, "executeCommand erred:$output")
-            return "Command error\n" + output
+            Logger.e(this, "executeCommand erred:${e.message}")
+            return "Command error:" + e.message + "\n$output"
         }
         return output
     }
