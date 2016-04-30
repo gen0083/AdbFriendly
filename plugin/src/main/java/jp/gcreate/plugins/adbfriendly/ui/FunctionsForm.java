@@ -65,17 +65,6 @@ public class FunctionsForm extends DialogWrapper
             public void actionPerformed(ActionEvent e) {
                 SetAdbPathForm pathForm = new SetAdbPathForm(project);
                 pathForm.show();
-                if (pathForm.getExitCode() == DialogWrapper.OK_EXIT_CODE) {
-                    runningReconnectProcessShow(true);
-                    String adbPath = pathForm.getAdbPath();
-                    boolean success = AdbConnector.INSTANCE.connectAdbWithPath(adbPath);
-                    if (success) {
-//                        PluginConfig.INSTANCE.setAdbPath(adbPath);
-//                        PluginConfig.INSTANCE.save();
-                    }else {
-                        runningReconnectProcessShow(false);
-                    }
-                }
             }
         });
 
@@ -98,13 +87,6 @@ public class FunctionsForm extends DialogWrapper
         AdbConnector.INSTANCE.removeDeviceChangedListener(this);
         AdbConnector.INSTANCE.removeDeviceChangedListener(this);
         FunctionsManager.INSTANCE.removeFunctionsCallbacks(this);
-    }
-
-    private void runningReconnectProcessShow(boolean running) {
-        adbReconnectingPanel.setVisible(running);
-        adbReconnectingPanel.invalidate();
-        adbConnectedPanel.setVisible(!running);
-        adbConnectedPanel.invalidate();
     }
 
     @Override

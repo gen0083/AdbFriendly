@@ -1,8 +1,10 @@
 package jp.gcreate.plugins.adbfriendly.ui;
 
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.DialogEarthquakeShaker;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.ValidationInfo;
+import jp.gcreate.plugins.adbfriendly.adb.AdbConnector;
 import jp.gcreate.plugins.adbfriendly.util.PluginConfig;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,13 +30,15 @@ import javax.swing.*;
 public class SetAdbPathForm extends DialogWrapper {
     private JPanel     contentPane;
     private JTextField inputedAdbPath;
-    private String adbPath;
+    private JLabel     cantConnectLabel;
+    private String     adbPath;
 
     public SetAdbPathForm(Project project) {
         super(project);
 
         setTitle("Set Your ADB Path");
         adbPath = PluginConfig.INSTANCE.getAdbPath();
+        cantConnectLabel.setVisible(false);
 
         init();
     }
@@ -51,7 +55,16 @@ public class SetAdbPathForm extends DialogWrapper {
 
     @Override
     protected void doOKAction() {
-        super.doOKAction();
+        boolean connected = AdbConnector.INSTANCE.connectAdbWithPath(adbPath);
+        cantConnectLabel.setVisible(!connected);
+        cantConnectLabel.invalidate();
+        if (connected) {
+            PluginConfig.INSTANCE.setAdbPath(adbPath);
+            PluginConfig.INSTANCE.save();
+            super.doOKAction();
+        }else {
+            DialogEarthquakeShaker.shake((JDialog)getPeer().getWindow());
+        }
     }
 
     @Nullable
