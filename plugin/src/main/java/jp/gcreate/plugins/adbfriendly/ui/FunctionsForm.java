@@ -99,6 +99,7 @@ public class FunctionsForm extends DialogWrapper implements FunctionsCallback, A
             String path = PluginConfig.INSTANCE.getAdbPath();
             if (path.equals("")) {
                 path = new ShellCommand().executeCommand("which adb");
+                path = path.trim();
             }
             if (!path.equals("") && !path.contains("timeout")) {
                 AdbConnector.INSTANCE.connectAdbWithPath(path);
