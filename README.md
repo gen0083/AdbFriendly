@@ -3,7 +3,9 @@ ADB Friendly
 
 ADB Friendly is a Android Studio plugin to provide some useful functions via ADB.
 
-Now ver0.1, the plugin can rotate screen on connected devices or emulators only.
+The plugin can rotate screen on connected devices or emulators only now.
+But I will add to some features.
+If you have requests feel free to contact me :)
 
 ## Functions
 
@@ -15,34 +17,46 @@ Refer youtube
 
 ## Installation
 
-1. ~~Select Android Studio's menu `Preference > Plugins` then search `ADB Friendly` and install.~~(Coming soon)
+1. Select Android Studio's menu `Preference > Plugins` then search `ADB Friendly` and install.
 1. Clone this repository then build and install from zip file. See develop section.
 
 After installation, plugin added on toolbar at the last section.
+If you use Android Studio, the plugin added into Tools > Android too.
 
 If you don't find it, go to View menu on Android Studio and toggle toolbar.
 
 ## Usage
 
-Click a ADB Friendly icon on Android Studio's toolbar then dialog is shown.
+Click a ADB Friendly icon (or menu) on your IDE's toolbar then dialog is shown.
 
 Select your device or emulator, and input rotating count in integer, finally click OK button.
 
 Then target device's screen will rotate automatically.
 
-If devices are not shown on the dialog even through you connect devices, try below please on your terminal.
+Now the plugin automatically connect to adb.
+If the plugin can not connect to adb then input your adb path through the dialog.
+Even through do it but devices are not shown on the dialog, try below please on your terminal.
 
 ```
 adb devices
 ```
 
-I'll fix it that the plugin reconnect to adb automatically, but now reconnect to adb by yourself sorry :(
-
 ## Development
 
 `git clone https://github.com/gen0083/AdbFriendly.git`
 
-My developing environment:
+Import the project by gradle project on your IDEA.
+
+### Optional
+
+Modify to plugin project will be useful.
+
+1. Open `.idea/modules/plugin/plugin.iml` and `.idea/modules/plugin/plugin_main.iml`. (If you don't find it then close and reopen project.)
+1. Replace 'JAVA_MODULE' to 'PLUGIN_MODULE'. (It is type attribute in module tag.)
+1. Close project and reopen project.
+1. You can use wizard to add Action etc.
+
+### My developing environment
 
 + Project SDK: Intellij Platform Plugin SDK with Intellij 14.1.6 (Internal Java Platform 1.6)
 + Develop with IntelliJ 2016.1.1 with JDK 1.8
@@ -59,14 +73,7 @@ Otherwise launch IntelliJ 14.1.6.
 
 `./gradlew buildPlugin`
 
-Zip file located to `<project_root>/build/distributions/ADB Friendly-<version>.zip`.
-
-## Issue
-
-+ when first running, sometimes plugin can not connect to adb.
-  At the time, control adb connection error. probably using adb location with createBridge may works fine.
-
-  `Cannot start adb when AndroidDebugBridge is created without the location of adb.`
+Zip file located to `<project_root>/plugin/build/distributions/ADB Friendly.zip`.
 
 ## License
 

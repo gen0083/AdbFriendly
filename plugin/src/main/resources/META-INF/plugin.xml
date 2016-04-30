@@ -1,0 +1,87 @@
+<!--
+  ~ ADB Friendly
+  ~ Copyright 2016 gen0083
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<idea-plugin version="2" url="https://github.com/gen0083/AdbFriendly">
+    <id>jp.gcreate.plugins.adbfriendly</id>
+    <name>ADB Friendly</name>
+    <version>0.2.0</version>
+    <vendor email="archiherewego@gmail.com"
+            url="http://gcreate.jp/">
+        G-Create
+    </vendor>
+
+    <description><![CDATA[
+    ADB Friendly is a Android Studio plugin to provide some useful functions via ADB.<br>
+    The plugin can rotate screen on connected devices or emulators only now.
+    But I will add to some features.
+    If you have requests feel free to contact me :)
+    <br>
+    Usage:<br>
+    Install the plugin then icon is added to toolbar.<br>
+    If you using Android Studio, it was added to the menu inside Tools > Android.<br>
+    Click the icon or menu then dialog pop up.<br>
+    <br>
+    Now the plugin automatically connect to adb but it was not work well on Windows.<br>
+    If your devices are not shown on the dialog, please try to run some adb command (e.g. "adb devices") from the terminal.
+    (You can use adb command, the plugin can access adb and display devices.)
+    ]]></description>
+
+    <change-notes><![CDATA[
+    <dl>
+        <dt>0.2.0</dt>
+        <dd>Added connect to adb feature.</dd>
+        <dt>0.1.0</dt>
+        <dd>Screen rotate function added.</dd>
+    </dl>
+    ]]></change-notes>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+    <idea-version since-build="141.0"/>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.lang</depends>
+    <depends>com.intellij.modules.platform</depends>
+    <depends optional="true">com.intellij.modules.androidstudio</depends>
+    <depends optional="true">org.jetbrains.android</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+        <action id="jp.gcreate.plugins.adbfriendly.ShowDialogAction"
+                class="jp.gcreate.plugins.adbfriendly.ShowDialogAction"
+                text="ADB Friendly"
+                description="Show operating dialog"
+                icon="/images/icon.png"
+        >
+            <add-to-group group-id="MainToolBar"
+                          anchor="last"/>
+        </action>
+        <action class="jp.gcreate.plugins.adbfriendly.ShowDialogAction"
+                id="jp.gcreate.plugins.adbfriendly.ShowDialogActionOnMenu"
+                text="ADB Friendly"
+                description="Show operating dialog"
+                >
+            <add-to-group group-id="AndroidToolsGroup"
+                          anchor="first"/>
+        </action>
+    </actions>
+
+</idea-plugin>

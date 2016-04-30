@@ -15,15 +15,24 @@
  * limitations under the License.
  */
 
-buildscript {
-    ext{
-        kotlin_version = '1.0.1-2'
+package jp.gcreate.plugins.adbfriendly.util
+
+import java.util.*
+
+
+object Logger {
+    @JvmStatic
+    fun d(clazz: Any, message: String = ""){
+        output(clazz, message, "debug")
     }
 
-    repositories {
-        mavenCentral()
+    @JvmStatic
+    fun e(clazz: Any, message: String){
+        output(clazz, message, "error")
     }
-    dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+
+    private fun output(clazz: Any, message: String, debugType: String){
+        val output = "[${Date().toHHMMDD()}] (${clazz.javaClass.simpleName}/$debugType) $message"
+        println(output)
     }
 }
