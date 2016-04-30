@@ -36,8 +36,7 @@ import java.awt.event.ActionListener;
  * limitations under the License.
  */
 
-public class FunctionsForm extends DialogWrapper
-        implements FunctionsCallback, AndroidDebugBridge.IDeviceChangeListener,
+public class FunctionsForm extends DialogWrapper implements FunctionsCallback, AndroidDebugBridge.IDeviceChangeListener,
         AndroidDebugBridge.IDebugBridgeChangeListener {
     private JTextField       rollingCount;
     private JCheckBox        showProgressCheckBox;
@@ -47,9 +46,8 @@ public class FunctionsForm extends DialogWrapper
     private JLabel           notifyAlreadyRunning;
     private JPanel           adbConnectedPanel;
     private JButton          adbConnectButton;
-    private JPanel adbReconnectingPanel;
     private DefaultListModel connectedDevicesModel;
-    private Project project;
+    private Project          project;
 
     public FunctionsForm(AnActionEvent event) {
         super(event.getProject());
@@ -77,7 +75,7 @@ public class FunctionsForm extends DialogWrapper
         init();
     }
 
-    private void setListenerOnLaunch(){
+    private void setListenerOnLaunch() {
         AdbConnector.INSTANCE.addDeviceChangeListener(this);
         AdbConnector.INSTANCE.addBridgeChangedListener(this);
         FunctionsManager.INSTANCE.addFunctionsCallback(this);
@@ -97,13 +95,11 @@ public class FunctionsForm extends DialogWrapper
     private void checkAdbConnection() {
         boolean connected = AdbConnector.INSTANCE.isAdbConnected();
         adbConnectedPanel.setVisible(!connected);
-        adbReconnectingPanel.setVisible(false);
         if (!connected) {
             String path = PluginConfig.INSTANCE.getAdbPath();
             if (path.equals("")) {
                 path = new ShellCommand().executeCommand("which adb");
             }
-            Logger.d(this, "path is " + path);
             if (!path.equals("") && !path.contains("timeout")) {
                 AdbConnector.INSTANCE.connectAdbWithPath(path);
             }
@@ -128,8 +124,8 @@ public class FunctionsForm extends DialogWrapper
         boolean noDevices = (devices == null || devices.length == 0);
         notifyDevicesNotFound.setVisible(noDevices);
         notifyDevicesNotFound.invalidate();
-        int    selected       = -1;
-        int    i              = 0;
+        int selected = -1;
+        int i        = 0;
         connectedDevicesModel.clear();
         if (!noDevices) {
             String previousSerial = PluginConfig.INSTANCE.getDeviceSerial();
@@ -150,7 +146,7 @@ public class FunctionsForm extends DialogWrapper
 
     private void checkRunningTaskExist() {
         FriendlyFunctions currentFunction = FunctionsManager.INSTANCE.getRunningFunctionOrNull();
-        boolean isRunning = currentFunction != null;
+        boolean           isRunning       = currentFunction != null;
         // If running functions now then set disable buttons which to run functions.
         setOKActionEnabled(!isRunning);
         notifyAlreadyRunning.setVisible(isRunning);
@@ -159,16 +155,11 @@ public class FunctionsForm extends DialogWrapper
 
     @Override
     protected void doOKAction() {
-        int index = devicesList.getSelectedIndex();
+        int     index  = devicesList.getSelectedIndex();
         IDevice device = (IDevice) connectedDevicesModel.getElementAt(index);
-        int count = Integer.parseInt(rollingCount.getText());
+        int     count  = Integer.parseInt(rollingCount.getText());
         if (device != null && device.isOnline()) {
-            FunctionsManager.INSTANCE.startFunction(
-                    new DeviceScreenRolling(device,
-                            FunctionsManager.INSTANCE,
-                            count,
-                            showProgressCheckBox.isSelected()
-                            ));
+            FunctionsManager.INSTANCE.startFunction(new DeviceScreenRolling(device, FunctionsManager.INSTANCE, count, showProgressCheckBox.isSelected()));
 
             PluginConfig.INSTANCE.setDeviceSerial(device.getSerialNumber());
             PluginConfig.INSTANCE.setRotateCount(count);
@@ -187,10 +178,10 @@ public class FunctionsForm extends DialogWrapper
         }
         try {
             int count = Integer.parseInt(rollingCount.getText());
-            if(count <= 0) {
+            if (count <= 0) {
                 return new ValidationInfo("Rotating count must be beggar than 0.", rollingCount);
             }
-        }catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             return new ValidationInfo("Rotating count must be digit.", rollingCount);
         }
         return null;
@@ -198,7 +189,8 @@ public class FunctionsForm extends DialogWrapper
 
     /**
      * When device status changed, these callbacks are called.
-     * @param device
+     *
+     * @param device connected device
      */
     @Override
     public void deviceConnected(IDevice device) {

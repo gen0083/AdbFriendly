@@ -29,15 +29,16 @@ import javax.swing.*;
 
 public class SetAdbPathForm extends DialogWrapper {
     private JPanel     contentPane;
-    private JTextField inputedAdbPath;
+    private JTextField inputtedAdbPath;
     private JLabel     cantConnectLabel;
     private String     adbPath;
 
-    public SetAdbPathForm(Project project) {
+    SetAdbPathForm(Project project) {
         super(project);
 
         setTitle("Set Your ADB Path");
         adbPath = PluginConfig.INSTANCE.getAdbPath();
+        inputtedAdbPath.setText(adbPath);
         cantConnectLabel.setVisible(false);
 
         init();
@@ -47,10 +48,6 @@ public class SetAdbPathForm extends DialogWrapper {
     @Override
     protected JComponent createCenterPanel() {
         return contentPane;
-    }
-
-    public String getAdbPath() {
-        return adbPath;
     }
 
     @Override
@@ -70,11 +67,11 @@ public class SetAdbPathForm extends DialogWrapper {
     @Nullable
     @Override
     protected ValidationInfo doValidate() {
-        String path = inputedAdbPath.getText();
+        String path = inputtedAdbPath.getText();
         if (path != null) {
             adbPath = path.trim();
             if (adbPath.length() == 0) {
-                return new ValidationInfo("Input your adb path.", inputedAdbPath);
+                return new ValidationInfo("Input your adb path.", inputtedAdbPath);
             }
         }
         return null;
