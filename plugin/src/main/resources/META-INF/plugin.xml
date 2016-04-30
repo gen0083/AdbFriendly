@@ -18,7 +18,7 @@
 <idea-plugin version="2" url="https://github.com/gen0083/AdbFriendly">
     <id>jp.gcreate.plugins.adbfriendly</id>
     <name>ADB Friendly</name>
-    <version>0.1.0</version>
+    <version>0.2.0</version>
     <vendor email="archiherewego@gmail.com"
             url="http://gcreate.jp/">
         G-Create
@@ -26,19 +26,24 @@
 
     <description><![CDATA[
     ADB Friendly is a Android Studio plugin to provide some useful functions via ADB.<br>
-    Now ver0.1, the plugin can rotate screen on connected devices or emulators only.<br>
+    The plugin can rotate screen on connected devices or emulators only now.
+    But I will add to some features.
+    If you have requests feel free to contact me :)
     <br>
     Usage:<br>
     Install the plugin then icon is added to toolbar.<br>
-    If you using Android Studio, added to the menu inside Tools > Android.<br>
+    If you using Android Studio, it was added to the menu inside Tools > Android.<br>
     Click the icon or menu then dialog pop up.<br>
     <br>
+    Now the plugin automatically connect to adb but it was not work well on Windows.<br>
     If your devices are not shown on the dialog, please try to run some adb command (e.g. "adb devices") from the terminal.
     (You can use adb command, the plugin can access adb and display devices.)
     ]]></description>
 
     <change-notes><![CDATA[
     <dl>
+        <dt>0.2.0</dt>
+        <dd>Added connect to adb feature.</dd>
         <dt>0.1.0</dt>
         <dd>Screen rotate function added.</dd>
     </dl>

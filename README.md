@@ -3,7 +3,9 @@ ADB Friendly
 
 ADB Friendly is a Android Studio plugin to provide some useful functions via ADB.
 
-Now ver0.1, the plugin can rotate screen on connected devices or emulators only.
+The plugin can rotate screen on connected devices or emulators only now.
+But I will add to some features.
+If you have requests feel free to contact me :)
 
 ## Functions
 
@@ -17,7 +19,6 @@ Refer youtube
 
 1. Select Android Studio's menu `Preference > Plugins` then search `ADB Friendly` and install.
 1. Clone this repository then build and install from zip file. See develop section.
-1. Download zip file from releases page and install from the file on your IDE.
 
 After installation, plugin added on toolbar at the last section.
 If you use Android Studio, the plugin added into Tools > Android too.
@@ -32,19 +33,19 @@ Select your device or emulator, and input rotating count in integer, finally cli
 
 Then target device's screen will rotate automatically.
 
-If devices are not shown on the dialog even through you connect devices, try below please on your terminal.
+Now the plugin automatically connect to adb.
+If the plugin can not connect to adb then input your adb path through the dialog.
+Even through do it but devices are not shown on the dialog, try below please on your terminal.
 
 ```
 adb devices
 ```
 
-I'll fix it that the plugin reconnect to adb automatically, but now reconnect to adb by yourself sorry :(
-
 ## Development
 
 `git clone https://github.com/gen0083/AdbFriendly.git`
 
-Import the project by gradle project on your IDE.
+Import the project by gradle project on your IDEA.
 
 ### Optional
 

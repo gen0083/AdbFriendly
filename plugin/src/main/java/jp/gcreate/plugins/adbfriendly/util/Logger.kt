@@ -28,7 +28,7 @@ val hhmmddFormat : SimpleDateFormat = SimpleDateFormat("HH:mm:ss")
 fun Date.toHHMMDD() : String = hhmmddFormat.format(this)
 
 object Logger{
-    private val debug = true
+    private val debug = false
     val notificationGroup = NotificationGroup("logger", NotificationDisplayType.NONE, true)
 
     @JvmStatic
