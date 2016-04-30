@@ -165,7 +165,8 @@ object FunctionsManager : IDeviceChangeListener, IClientChangeListener, IDebugBr
     }
 
     override fun bridgeChanged(bridge: AndroidDebugBridge) {
-        // bridgeChanged called at when adb is connecting, disconnecting and reconnecting etc.
+        // bridgeChanged called at when adb is connecting.
+        // When disconnected only this is not called.
         Logger.d(this, "bridgeChanged $bridge")
         // This cancel operation may be not necessary.
         // But adb connection changed, we do cancel operation to safe operation.

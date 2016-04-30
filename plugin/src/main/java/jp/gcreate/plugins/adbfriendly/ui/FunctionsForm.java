@@ -46,8 +46,8 @@ public class FunctionsForm extends DialogWrapper
     private JPanel           menuWindow;
     private JLabel           notifyAlreadyRunning;
     private JPanel           adbConnectedPanel;
-    private JLabel           adbConnectedText;
     private JButton          adbConnectButton;
+    private JPanel adbReconnectingPanel;
     private DefaultListModel connectedDevicesModel;
     private Project project;
 
@@ -65,7 +65,17 @@ public class FunctionsForm extends DialogWrapper
             public void actionPerformed(ActionEvent e) {
                 SetAdbPathForm pathForm = new SetAdbPathForm(project);
                 pathForm.show();
-                AdbConnector.INSTANCE.connectAdbWithPath(pathForm.getAdbPath());
+                if (pathForm.getExitCode() == DialogWrapper.OK_EXIT_CODE) {
+                    runningReconnectProcessShow(true);
+                    String adbPath = pathForm.getAdbPath();
+                    boolean success = AdbConnector.INSTANCE.connectAdbWithPath(adbPath);
+                    if (success) {
+//                        PluginConfig.INSTANCE.setAdbPath(adbPath);
+//                        PluginConfig.INSTANCE.save();
+                    }else {
+                        runningReconnectProcessShow(false);
+                    }
+                }
             }
         });
 
@@ -90,6 +100,13 @@ public class FunctionsForm extends DialogWrapper
         FunctionsManager.INSTANCE.removeFunctionsCallbacks(this);
     }
 
+    private void runningReconnectProcessShow(boolean running) {
+        adbReconnectingPanel.setVisible(running);
+        adbReconnectingPanel.invalidate();
+        adbConnectedPanel.setVisible(!running);
+        adbConnectedPanel.invalidate();
+    }
+
     @Override
     protected JComponent createCenterPanel() {
         return menuWindow;
@@ -98,14 +115,11 @@ public class FunctionsForm extends DialogWrapper
     private void checkAdbConnection() {
         boolean connected = AdbConnector.INSTANCE.isAdbConnected();
         adbConnectedPanel.setVisible(!connected);
+        adbReconnectingPanel.setVisible(false);
         if (!connected) {
-//            WhichAdb adb = new WhichAdb();
-//            String path = adb.getAdbPath();
             String path = PluginConfig.INSTANCE.getAdbPath();
             if (path.equals("")) {
                 path = new ShellCommand().executeCommand("which adb");
-                // TODO: delete this
-                path = "/Applications/android-sdk/platform-tools/adb";
             }
             Logger.d(this, "path is " + path);
             if (!path.equals("") && !path.contains("timeout")) {
@@ -129,18 +143,23 @@ public class FunctionsForm extends DialogWrapper
 
     private void bindDevicesToList() {
         IDevice devices[] = AdbConnector.INSTANCE.getDevices();
-        notifyDevicesNotFound.setVisible(devices.length == 0);
+        boolean noDevices = (devices == null || devices.length == 0);
+        notifyDevicesNotFound.setVisible(noDevices);
         notifyDevicesNotFound.invalidate();
-        int selected = -1;
-        int i = 0;
-        String previousSerial = PluginConfig.INSTANCE.getDeviceSerial();
+        int    selected       = -1;
+        int    i              = 0;
         connectedDevicesModel.clear();
-        for (IDevice device : devices) {
-            if (device.getSerialNumber().equals(previousSerial)) {
-                selected = i;
+        if (!noDevices) {
+            String previousSerial = PluginConfig.INSTANCE.getDeviceSerial();
+            connectedDevicesModel.clear();
+            for (IDevice device : devices) {
+                if (device.getSerialNumber()
+                          .equals(previousSerial)) {
+                    selected = i;
+                }
+                connectedDevicesModel.addElement(device);
+                i++;
             }
-            connectedDevicesModel.addElement(device);
-            i++;
         }
         devicesList.setModel(connectedDevicesModel);
         devicesList.setSelectedIndex(selected);
@@ -215,6 +234,7 @@ public class FunctionsForm extends DialogWrapper
             @Override
             public void run() {
                 bindDevicesToList();
+                checkAdbConnection();
             }
         });
     }
@@ -269,6 +289,7 @@ public class FunctionsForm extends DialogWrapper
             @Override
             public void run() {
                 checkAdbConnection();
+                bindDevicesToList();
             }
         });
     }

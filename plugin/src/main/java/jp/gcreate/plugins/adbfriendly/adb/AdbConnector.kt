@@ -73,15 +73,27 @@ object AdbConnector : IClientChangeListener, IDeviceChangeListener, IDebugBridge
         AndroidDebugBridge.addDeviceChangeListener(this)
     }
 
-    fun connectAdbWithPath(path: String) {
+    fun connectAdbWithPath(path: String): Boolean {
         removeListener()
         AndroidDebugBridge.disconnectBridge()
         initialized = true
         AndroidDebugBridge.initIfNeeded(false)
-        AndroidDebugBridge.createBridge(path, true)
-        AndroidDebugBridge.addClientChangeListener(this)
-        AndroidDebugBridge.addDebugBridgeChangeListener(this)
-        AndroidDebugBridge.addDeviceChangeListener(this)
+        try {
+            val bridge = AndroidDebugBridge.createBridge(path, true)
+            if (bridge != null) {
+                AndroidDebugBridge.addClientChangeListener(this)
+                AndroidDebugBridge.addDebugBridgeChangeListener(this)
+                AndroidDebugBridge.addDeviceChangeListener(this)
+                return true
+            }else {
+                Logger.e(this, "Cannot connect adb. Is adb path correctly?")
+                return false
+            }
+        }catch (e: IllegalArgumentException) {
+            Logger.e(this, "Cannot connect adb caused by ${e.cause}\n" +
+                           "Probably adb path is not correctly.")
+            return false
+        }
     }
 
     fun removeListener() {
@@ -98,8 +110,8 @@ object AdbConnector : IClientChangeListener, IDeviceChangeListener, IDebugBridge
         return AndroidDebugBridge.getBridge()
     }
 
-    fun getDevices(): Array<IDevice> {
-        return getAdbBridge()!!.devices
+    fun getDevices(): Array<IDevice>? {
+        return getAdbBridge()?.devices
     }
 
     fun addClientChangeListener(listener: IClientChangeListener) {
