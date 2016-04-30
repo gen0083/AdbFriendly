@@ -73,10 +73,9 @@ object AdbConnector : IClientChangeListener, IDeviceChangeListener, IDebugBridge
         AndroidDebugBridge.addDeviceChangeListener(this)
     }
 
-    fun connectAdb(path: String) {
-        if (initialized) {
-            removeListener()
-        }
+    fun connectAdbWithPath(path: String) {
+        removeListener()
+        AndroidDebugBridge.disconnectBridge()
         initialized = true
         AndroidDebugBridge.initIfNeeded(false)
         AndroidDebugBridge.createBridge(path, true)
@@ -92,15 +91,15 @@ object AdbConnector : IClientChangeListener, IDeviceChangeListener, IDebugBridge
     }
 
     fun isAdbConnected(): Boolean {
-        return getAdbBridge().isConnected
+        return getAdbBridge()?.isConnected ?: false
     }
 
-    fun getAdbBridge(): AndroidDebugBridge {
+    fun getAdbBridge(): AndroidDebugBridge? {
         return AndroidDebugBridge.getBridge()
     }
 
     fun getDevices(): Array<IDevice> {
-        return getAdbBridge().devices
+        return getAdbBridge()!!.devices
     }
 
     fun addClientChangeListener(listener: IClientChangeListener) {

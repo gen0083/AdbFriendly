@@ -152,7 +152,11 @@ object FunctionsManager : IDeviceChangeListener, IClientChangeListener, IDebugBr
 
     override fun deviceDisconnected(device: IDevice) {
         Logger.d(this, "deviceDisconnected $device")
-        onErred()
+        // if function is running and target device matches disconnected device, function can not continue.
+        // Disconnected device is not always match the device running functions.
+        if (currentFunction?.device?.equals(device) ?: false) {
+            onErred()
+        }
     }
 
     override fun clientChanged(client: Client, changeMask: Int) {
@@ -161,9 +165,11 @@ object FunctionsManager : IDeviceChangeListener, IClientChangeListener, IDebugBr
     }
 
     override fun bridgeChanged(bridge: AndroidDebugBridge) {
-        // maybe not used
+        // bridgeChanged called at when adb is connecting, disconnecting and reconnecting etc.
         Logger.d(this, "bridgeChanged $bridge")
-        onErred()
+        // This cancel operation may be not necessary.
+        // But adb connection changed, we do cancel operation to safe operation.
+        cancel()
     }
 
 }

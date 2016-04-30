@@ -16,6 +16,8 @@ import jp.gcreate.plugins.adbfriendly.util.PluginConfig;
 import jp.gcreate.plugins.adbfriendly.util.ShellCommand;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /*
  * ADB Friendly
@@ -58,9 +60,17 @@ public class FunctionsForm extends DialogWrapper
 
         connectedDevicesModel = new DefaultListModel();
         devicesList.setCellRenderer(new DevicesListRenderer());
+        adbConnectButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SetAdbPathForm pathForm = new SetAdbPathForm(project);
+                pathForm.show();
+                AdbConnector.INSTANCE.connectAdbWithPath(pathForm.getAdbPath());
+            }
+        });
 
-        checkAdbConnection();
         setListenerOnLaunch();
+        checkAdbConnection();
         bindDevicesToList();
         checkRunningTaskExist();
         restorePreviousState();
@@ -91,13 +101,15 @@ public class FunctionsForm extends DialogWrapper
         if (!connected) {
 //            WhichAdb adb = new WhichAdb();
 //            String path = adb.getAdbPath();
-            String path = PluginConfig.ADB_PATH;
+            String path = PluginConfig.INSTANCE.getAdbPath();
             if (path.equals("")) {
                 path = new ShellCommand().executeCommand("which adb");
+                // TODO: delete this
+                path = "/Applications/android-sdk/platform-tools/adb";
             }
             Logger.d(this, "path is " + path);
-            if (!path.contains("timeout")) {
-                AdbConnector.INSTANCE.connectAdb(path);
+            if (!path.equals("") && !path.contains("timeout")) {
+                AdbConnector.INSTANCE.connectAdbWithPath(path);
             }
         }
     }
